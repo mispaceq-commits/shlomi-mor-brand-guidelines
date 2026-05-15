@@ -5,80 +5,117 @@
 
 /* -------- Fonts ---------------------------------------------------------
    Approved type system (per brand owner):
-     · idot                       — Display Serif (headlines)
-     · Futura LT / Articulat CF   — Functional Sans (body, UI)
-     · Sacramento                 — Script Accent (primary script)
-     · NellRoundhandLTW05-Script  — Script Accent (alternate)
+     · idot                 — Display Serif (headlines)
+     · Futura LT            — Functional Sans (body, UI) primary
+     · Inter                — Functional Sans secondary / digital fallback
+     · Sacramento           — Script Accent (primary script, OFL)
+     · Snell Roundhand      — Script Accent (alternate, signature)
 
-   Drop licensed font files (woff2 preferred) into ./assets/fonts/ using the
-   filenames below. Sacramento is loaded from Google Fonts as it is openly
-   licensed (OFL) and matches the agreed type list. No other typefaces are
-   permitted in this brand book.
+   Drop licensed font files into ./assets/fonts/ using the filenames
+   referenced in each @font-face below. Sacramento and Inter load from
+   Google Fonts (OFL). No other typefaces are permitted in this brand book.
    --------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sacramento&display=swap');
 
+/* idot (Didot) — Display Serif */
 @font-face {
   font-family: 'idot';
-  src: url('assets/fonts/idot.woff2') format('woff2'),
-       url('assets/fonts/idot.woff')  format('woff');
+  src: url('assets/fonts/Didot-Regular.otf') format('opentype');
   font-display: swap;
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'idot';
-  src: url('assets/fonts/idot-italic.woff2') format('woff2'),
-       url('assets/fonts/idot-italic.woff')  format('woff');
+  src: url('assets/fonts/Didot-Italic.otf') format('opentype');
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'idot';
+  src: url('assets/fonts/Didot-Bold.otf') format('opentype');
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'idot Title';
+  src: url('assets/fonts/Didot-Title.otf') format('opentype');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Futura LT — Functional Sans */
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-Light.ttf') format('truetype');
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-LightOblique.ttf') format('truetype');
+  font-display: swap;
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-Book.ttf') format('truetype');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-BookOblique.ttf') format('truetype');
   font-display: swap;
   font-weight: 400;
   font-style: italic;
 }
 @font-face {
   font-family: 'FuturaLT';
-  src: url('assets/fonts/futura-lt-light.woff2') format('woff2'),
-       url('assets/fonts/futura-lt-light.woff')  format('woff');
-  font-display: swap;
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'FuturaLT';
-  src: url('assets/fonts/futura-lt-book.woff2') format('woff2'),
-       url('assets/fonts/futura-lt-book.woff')  format('woff');
-  font-display: swap;
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'FuturaLT';
-  src: url('assets/fonts/futura-lt-medium.woff2') format('woff2'),
-       url('assets/fonts/futura-lt-medium.woff')  format('woff');
+  src: url('assets/fonts/FuturaLT-Regular.ttf') format('truetype');
   font-display: swap;
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
-  font-family: 'ArticulatCF';
-  src: url('assets/fonts/articulat-cf-light.woff2') format('woff2'),
-       url('assets/fonts/articulat-cf-light.woff')  format('woff');
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-Oblique.ttf') format('truetype');
   font-display: swap;
-  font-weight: 300;
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-Bold.ttf') format('truetype');
+  font-display: swap;
+  font-weight: 700;
   font-style: normal;
 }
 @font-face {
-  font-family: 'ArticulatCF';
-  src: url('assets/fonts/articulat-cf-regular.woff2') format('woff2'),
-       url('assets/fonts/articulat-cf-regular.woff')  format('woff');
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/FuturaLT-BoldOblique.ttf') format('truetype');
+  font-display: swap;
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'SnellRoundhand';
+  src: url('assets/fonts/SnellRoundhand-Bold.otf') format('opentype');
   font-display: swap;
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
-  font-family: 'NellRoundhandLTW05-Script';
-  src: url('assets/fonts/NellRoundhandLTW05-Script.woff2') format('woff2'),
-       url('assets/fonts/NellRoundhandLTW05-Script.woff')  format('woff');
+  font-family: 'SnellRoundhand';
+  src: url('assets/fonts/SnellRoundhand-Black.otf') format('opentype');
   font-display: swap;
-  font-weight: 400;
+  font-weight: 700;
   font-style: normal;
 }
 
@@ -99,9 +136,9 @@
   --c-mute:          #8B8480;
 
   /* Type — approved typefaces only */
-  --f-serif:    'idot', 'Times New Roman', Times, serif;
-  --f-sans:     'FuturaLT', 'Futura LT', 'Articulat CF', 'ArticulatCF', 'Helvetica Neue', Arial, sans-serif;
-  --f-script:   'Sacramento', 'NellRoundhandLTW05-Script', 'NellRoundhandLTW05Script', cursive;
+  --f-serif:    'idot', 'Didot', 'Times New Roman', Times, serif;
+  --f-sans:     'FuturaLT', 'Futura LT', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --f-script:   'SnellRoundhand', 'Snell Roundhand', 'Sacramento', cursive;
 
   /* Grid */
   --page-w:  1440px;

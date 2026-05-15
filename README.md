@@ -7,7 +7,7 @@ The guidelines cover:
 - Brand story, mission and pillars
 - Logo system, construction and misuse
 - Color palette (main + applications)
-- Typography (idot / Futura LT / Articulat CF / Sacramento)
+- Typography (idot / Futura LT / Inter / Sacramento / Snell Roundhand)
 - Grid, photography direction, tone of voice
 - Applications and brand contact
 
@@ -26,9 +26,23 @@ python3 -m http.server 8000
 ```
 index.html       # all pages of the brand book, as scrollable sections
 styles.css       # all styles (editorial layout, typography, color tokens)
-assets/          # SVG icons and decorative graphics
+assets/
+  logo/          # SM logo SVG masters (black/white, full/monogram)
+  fonts/         # licensed font files (Didot, Futura LT, Snell Roundhand)
 ```
 
-## Typography notes
+## Typography
 
-The brand uses **idot** (display serif) and **Futura LT / Articulat CF** as functional sans-serif. For this static brand book preview, license-friendly Google Font substitutes are used (Playfair Display, Jost, Sacramento). When delivering final assets, swap the `@font-face` declarations in `styles.css` for the licensed fonts.
+Approved type system (used throughout the book and no others):
+
+| Role               | Family                                      | Files in `assets/fonts/` |
+| ------------------ | ------------------------------------------- | ------------------------ |
+| Display Serif      | **idot** (mapped to licensed Didot)         | `Didot-Regular.otf`, `Didot-Italic.otf`, `Didot-Bold.otf`, `Didot-Title.otf` |
+| Functional Sans    | **Futura LT** (primary) / **Inter** (fallback) | `FuturaLT-Light.ttf` ... `FuturaLT-BoldOblique.ttf` |
+| Script Accent      | **Sacramento** (Google OFL) / **Snell Roundhand** (signature) | `SnellRoundhand-Bold.otf`, `SnellRoundhand-Black.otf` |
+
+The full Futura LT package (including Condensed and Heavy/ExtraBold variants) is kept in the repo for downstream design work. Sacramento and Inter load from Google Fonts (OFL). No other typefaces are permitted in this brand book.
+
+## Export to PDF
+
+The book is print-ready: each `.page` section is sized at 1440 × 900 px, and Chromium's `Print → Save as PDF` (or the bundled `make_pdf.py` script) produces a 19-page PDF with vector text and SVG logos that opens cleanly in Adobe Illustrator for further editing.
