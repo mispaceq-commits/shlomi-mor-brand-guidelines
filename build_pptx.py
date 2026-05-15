@@ -1,0 +1,635 @@
+"""
+Build an editable PowerPoint version of the Shlomi Mor Wigs brand book.
+Each of the 19 pages becomes one slide with native text boxes and embedded
+logo images. Fonts: idot (Didot) / Futura LT / Snell Roundhand.
+"""
+from pptx import Presentation
+from pptx.util import Inches, Pt, Emu
+from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.ns import qn
+from copy import deepcopy
+from lxml import etree
+
+LOGO_DIR = "/tmp/logo_png"
+# Actual logo content aspect ratios (width / height) after trimming transparent pad
+FULL_LOGO_AR = 1.225
+MONO_AR = 1.182
+
+def logo_size(target_w=None, target_h=None, mono=False):
+    """Return (w, h) preserving aspect ratio. Pass either target_w or target_h."""
+    ar = MONO_AR if mono else FULL_LOGO_AR
+    if target_w is not None:
+        return target_w, target_w / ar
+    return target_h * ar, target_h
+
+# Colors
+C_INK = RGBColor(0x0E, 0x0E, 0x0E)
+C_PAPER = RGBColor(0xFF, 0xFF, 0xFF)
+C_CREAM = RGBColor(0xFB, 0xF8, 0xF4)
+C_MUTE = RGBColor(0x8B, 0x84, 0x80)
+C_RULE = RGBColor(0xD9, 0xD2, 0xCB)
+C_BLUSH = RGBColor(0xFC, 0xE3, 0xE5)
+C_ROSE = RGBColor(0xB6, 0x8F, 0x90)
+C_GOLD = RGBColor(0xA7, 0x8D, 0x52)
+C_CHAMPAGNE = RGBColor(0xC9, 0xAC, 0x7F)
+C_GRAY = RGBColor(0x6E, 0x66, 0x63)
+
+# Fonts
+F_SERIF = "Didot"
+F_SANS = "Futura LT"
+F_SCRIPT = "Snell Roundhand"
+F_SANS_FALLBACK = "Inter"
+
+# Slide size: 13.333 x 8.333 inches (matches 1440x900)
+SLIDE_W = Inches(13.333)
+SLIDE_H = Inches(8.333)
+SCALE_X = SLIDE_W / 1440  # EMU per CSS px
+SCALE_Y = SLIDE_H / 900
+
+def px(x):   return Emu(int(round(x * SCALE_X)))
+def py(y):   return Emu(int(round(y * SCALE_Y)))
+
+def add_bg(slide, color):
+    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, SLIDE_W, SLIDE_H)
+    bg.line.fill.background()
+    bg.fill.solid(); bg.fill.fore_color.rgb = color
+    return bg
+
+def add_text(slide, x, y, w, h, text, *, font=F_SANS, size=12, color=C_INK,
+             bold=False, italic=False, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP,
+             tracking=None, upper=False, line_spacing=None):
+    """Add a single-paragraph text box with controlled formatting."""
+    tb = slide.shapes.add_textbox(px(x), py(y), px(w), py(h))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.margin_left = tf.margin_right = Emu(0)
+    tf.margin_top = tf.margin_bottom = Emu(0)
+    tf.vertical_anchor = anchor
+    p = tf.paragraphs[0]
+    p.alignment = align
+    if line_spacing:
+        p.line_spacing = line_spacing
+    r = p.add_run()
+    r.text = text.upper() if upper else text
+    r.font.name = font
+    r.font.size = Pt(size)
+    r.font.bold = bold
+    r.font.italic = italic
+    r.font.color.rgb = color
+    if tracking is not None:
+        # set character spacing (in 1/100 pt) via XML
+        rPr = r._r.get_or_add_rPr()
+        rPr.set("spc", str(tracking))
+    return tb
+
+def add_rich_text(slide, x, y, w, h, runs, *, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP):
+    """Add a textbox with multiple runs. Each run = dict(text, font, size, color, bold, italic, tracking, upper)."""
+    tb = slide.shapes.add_textbox(px(x), py(y), px(w), py(h))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    tf.margin_left = tf.margin_right = Emu(0)
+    tf.margin_top = tf.margin_bottom = Emu(0)
+    tf.vertical_anchor = anchor
+    paragraphs = []
+    current = tf.paragraphs[0]
+    current.alignment = align
+    paragraphs.append(current)
+    for spec in runs:
+        if spec.get("br"):
+            current = tf.add_paragraph(); current.alignment = align
+            paragraphs.append(current)
+            continue
+        r = current.add_run()
+        text = spec["text"]
+        r.text = text.upper() if spec.get("upper") else text
+        r.font.name = spec.get("font", F_SANS)
+        r.font.size = Pt(spec.get("size", 12))
+        r.font.bold = spec.get("bold", False)
+        r.font.italic = spec.get("italic", False)
+        r.font.color.rgb = spec.get("color", C_INK)
+        spacing = spec.get("tracking")
+        if spacing is not None:
+            rPr = r._r.get_or_add_rPr()
+            rPr.set("spc", str(spacing))
+    return tb
+
+def add_line(slide, x1, y1, x2, y2, *, color=C_RULE, weight=0.5):
+    from pptx.util import Pt as PT
+    ln = slide.shapes.add_connector(1, px(x1), py(y1), px(x2), py(y2))
+    ln.line.color.rgb = color
+    ln.line.width = PT(weight)
+    return ln
+
+def add_rect(slide, x, y, w, h, *, fill=None, line=None, line_weight=0.5):
+    r = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, px(x), py(y), px(w), py(h))
+    if fill is None:
+        r.fill.background()
+    else:
+        r.fill.solid(); r.fill.fore_color.rgb = fill
+    if line is None:
+        r.line.fill.background()
+    else:
+        r.line.color.rgb = line
+        from pptx.util import Pt as PT
+        r.line.width = PT(line_weight)
+    return r
+
+def add_oval(slide, x, y, w, h, *, fill=None, line=None, line_weight=0.5):
+    r = slide.shapes.add_shape(MSO_SHAPE.OVAL, px(x), py(y), px(w), py(h))
+    if fill is None: r.fill.background()
+    else: r.fill.solid(); r.fill.fore_color.rgb = fill
+    if line is None: r.line.fill.background()
+    else:
+        r.line.color.rgb = line
+        from pptx.util import Pt as PT
+        r.line.width = PT(line_weight)
+    return r
+
+def add_image(slide, x, y, w, h, path):
+    return slide.shapes.add_picture(path, px(x), py(y), width=px(w), height=py(h))
+
+# Common rails
+def rails(slide, page_num, label_left, label_right):
+    # Top rail (eyebrow + page number)
+    add_text(slide, 72, 56, 700, 16, label_left, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=180)
+    add_text(slide, 1440-72-100, 56, 100, 16, str(page_num).zfill(2),
+             font=F_SANS, size=10, color=C_MUTE, align=PP_ALIGN.RIGHT, tracking=180)
+    add_line(slide, 72, 84, 1440-72, 84)
+    # Bottom rail
+    add_line(slide, 72, 820, 1440-72, 820)
+    add_text(slide, 72, 832, 700, 16, label_right, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=180)
+    add_text(slide, 1440-72-100, 832, 100, 16, str(page_num).zfill(2),
+             font=F_SANS, size=10, color=C_MUTE, align=PP_ALIGN.RIGHT, tracking=180)
+
+# ============================================================
+prs = Presentation()
+prs.slide_width = SLIDE_W
+prs.slide_height = SLIDE_H
+blank = prs.slide_layouts[6]
+
+# ------- PAGE 01: COVER -------
+s = prs.slides.add_slide(blank); add_bg(s, C_CREAM)
+add_text(s, 72, 56, 600, 16, "Shlomi Mor Wigs · NYC", font=F_SANS, size=10,
+         color=C_INK, upper=True, tracking=220)
+add_text(s, 1440-72-300, 56, 300, 16, "Edition 01 · 2025", font=F_SANS, size=10,
+         color=C_INK, upper=True, tracking=220, align=PP_ALIGN.RIGHT)
+lw, lh = logo_size(target_h=130, mono=True)
+add_image(s, (1440-lw)/2, 130, lw, lh, f"{LOGO_DIR}/shlomi-mor-monogram-black.png")
+add_rich_text(s, 72, 440, 1180, 280, [
+    {"text":"the","font":F_SCRIPT,"size":48,"color":C_GOLD,"italic":True},
+    {"br":True},
+    {"text":"Brand ","font":F_SERIF,"size":120,"color":C_INK},
+    {"text":"Book.","font":F_SERIF,"size":120,"color":C_INK,"italic":True},
+])
+# Seal (circle on right)
+add_oval(s, 1260, 420, 140, 140, line=C_INK, line_weight=0.5)
+add_rich_text(s, 1260, 440, 140, 100, [
+    {"text":"Crown","font":F_SCRIPT,"size":14,"color":C_INK,"italic":True},
+    {"br":True},
+    {"text":"Your","font":F_SCRIPT,"size":14,"color":C_INK,"italic":True},
+    {"br":True},
+    {"text":"Confidence","font":F_SCRIPT,"size":14,"color":C_INK,"italic":True},
+], align=PP_ALIGN.CENTER)
+add_text(s, 72, 832, 320, 16, "Visual Identity Guidelines", font=F_SANS,
+         size=10, color=C_INK, upper=True, tracking=200)
+add_text(s, 560, 832, 320, 16, "Vol. I — Foundations", font=F_SANS,
+         size=10, color=C_INK, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+add_text(s, 1440-72-280, 832, 280, 16, "Made in NY · USA", font=F_SANS,
+         size=10, color=C_INK, upper=True, tracking=200, align=PP_ALIGN.RIGHT)
+
+# Helper for content pages
+def content_slide(num, eyebrow, title_parts, body, *, bg=C_CREAM, foot=None):
+    s = prs.slides.add_slide(blank); add_bg(s, bg)
+    rails(s, num, eyebrow, foot or eyebrow)
+    add_text(s, 72, 124, 1100, 20, f"{num:02d} — {eyebrow}", font=F_SANS,
+             size=10, color=C_MUTE, upper=True, tracking=200)
+    add_rich_text(s, 72, 160, 1296, 80, title_parts)
+    if body:
+        add_text(s, 72, 280, 700, 200, body, font=F_SANS, size=13,
+                 color=C_INK, line_spacing=1.55)
+    return s
+
+# ------- PAGE 02: CONTENTS -------
+toc_items = [
+    ("01","Cover"),("02","Contents"),("03","Welcome & Brand Story"),
+    ("04","Mission · Vision · Values"),("05","Two Streams — Medical & Luxury"),
+    ("06","Logo Variations"),("07","Logo Construction & Clear Space"),
+    ("08","Logo Misuse"),("09","The Main Colors"),
+    ("10","Color Usage & Proportions"),("11","Display Serif — idot"),
+    ("12","Functional Sans — Futura LT / Inter"),
+    ("13","Script Accent — Sacramento / Snell Roundhand"),
+    ("14","Hierarchy & Pairing"),("15","Grid System"),
+    ("16","Photography Direction"),("17","Tone of Voice"),
+    ("18","Applications"),("19","Contact & Credits"),
+]
+s = content_slide(2, "Contents", [
+    {"text":"Table of ","font":F_SERIF,"size":64,"color":C_INK},
+    {"text":"contents.","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
+], "A nineteen-section brand book covering identity foundations, visual language and brand applications. Designed to be read in sequence, referenced as a system.")
+# Two columns of TOC
+col_y_start = 360
+for i, (num, name) in enumerate(toc_items):
+    col = i // 10
+    row = i % 10
+    cx = 72 + col * 660
+    cy = col_y_start + row * 42
+    add_text(s, cx, cy, 36, 24, num, font=F_SANS, size=10, color=C_MUTE, tracking=160)
+    add_text(s, cx+44, cy, 540, 24, name, font=F_SERIF, size=18, color=C_INK)
+    add_line(s, cx, cy+30, cx+600, cy+30)
+
+# ------- PAGE 03: WELCOME -------
+content_slide(3, "Welcome", [
+    {"text":"A house of ","font":F_SERIF,"size":64,"color":C_INK},
+    {"text":"hair","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
+    {"text":", confidence","font":F_SERIF,"size":64,"color":C_INK},
+    {"br":True},
+    {"text":"and quiet ","font":F_SERIF,"size":64,"color":C_INK},
+    {"text":"craft","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
+    {"text":".","font":F_SERIF,"size":64,"color":C_INK},
+],
+"Shlomi Mor Wigs is a luxury custom-wig atelier based in New York City. We work with two women: the one rebuilding her sense of self after medical hair loss, and the one looking for the most exquisite, undetectable wig of her life. Both deserve the same level of craft, intimacy and editorial restraint — and both find it here.")
+
+# ------- PAGE 04: MISSION / VISION / VALUES -------
+s = content_slide(4, "Foundations", [
+    {"text":"Mission ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"·","font":F_SERIF,"size":56,"color":C_MUTE},
+    {"text":" Vision ","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+    {"text":"·","font":F_SERIF,"size":56,"color":C_MUTE},
+    {"text":" Values","font":F_SERIF,"size":56,"color":C_INK},
+], None)
+# Three columns
+cols = [
+    ("Mission","To return a woman's reflection to her — through European hair, hand-tied craftsmanship and a private, unhurried experience."),
+    ("Vision","To become the most trusted custom-wig atelier between Tel Aviv and New York, known equally for medical sensitivity and editorial excellence."),
+    ("Values","Discretion · Craft · Empathy · Longevity · Beauty without compromise."),
+]
+for i, (label, body) in enumerate(cols):
+    cx = 72 + i*440
+    add_text(s, cx, 340, 200, 16, label, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=200)
+    add_text(s, cx, 372, 400, 60, label, font=F_SERIF, size=32, color=C_INK)
+    add_text(s, cx, 440, 380, 300, body, font=F_SANS, size=13,
+             color=C_INK, line_spacing=1.55)
+
+# ------- PAGE 05: TWO STREAMS -------
+s = content_slide(5, "Streams", [
+    {"text":"Two women, ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"one ","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+    {"br":True},
+    {"text":"atelier","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":".","font":F_SERIF,"size":56,"color":C_INK},
+], None)
+# Two streams side by side
+streams = [
+    (C_BLUSH, "Medical Hair Loss", "Restoration",
+     "Soft, supportive, undetectable. We meet her where she is — with European hair, custom caps and the quiet space to recognise herself again."),
+    (RGBColor(0x14,0x14,0x14), "Luxury Custom Wigs", "Style & status",
+     "Fashion-editorial restraint with the craft of a couture house. Made for clients who never compromise on the quality of their hair.")
+]
+for i, (bg, eyebrow, head, body) in enumerate(streams):
+    cx = 72 + i * 660
+    add_rect(s, cx, 320, 620, 400, fill=bg)
+    text_color = C_INK if bg == C_BLUSH else C_PAPER
+    add_text(s, cx+40, 350, 540, 16, eyebrow, font=F_SANS, size=10,
+             color=text_color if bg!=C_BLUSH else C_GRAY, upper=True, tracking=200)
+    add_text(s, cx+40, 392, 540, 80, head, font=F_SERIF, size=32, color=text_color)
+    add_text(s, cx+40, 480, 540, 200, body, font=F_SANS, size=13,
+             color=text_color, line_spacing=1.55)
+
+# ------- PAGE 06: LOGO VARIATIONS -------
+s = content_slide(6, "Identity", [
+    {"text":"The ","font":F_SERIF,"size":64,"color":C_INK},
+    {"text":"Logo","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
+], None)
+# 3 panels: primary on cream, reversed on black, monogram on blush
+panels = [
+    (72,  260, 540, 320, C_CREAM, "Primary · Cream",    f"{LOGO_DIR}/shlomi-mor-logo-black.png",     180, False),
+    (652, 260, 716, 200, C_INK,   "Reversed · Black",   f"{LOGO_DIR}/shlomi-mor-logo-white.png",     110, False),
+    (652, 480, 716, 100, C_BLUSH, "Monogram · Blush",   f"{LOGO_DIR}/shlomi-mor-monogram-black.png", 64,  True),
+]
+for x, y, w, h, bg, label, logo, lh, mono in panels:
+    add_rect(s, x, y, w, h, fill=bg, line=C_RULE)
+    add_text(s, x+20, y+12, w-40, 16, label, font=F_SANS, size=9,
+             color=C_MUTE if bg!=C_INK else RGBColor(0xC9,0xC4,0xBF),
+             upper=True, tracking=200)
+    lw, lh2 = logo_size(target_h=lh, mono=mono)
+    add_image(s, x + (w-lw)/2, y + (h-lh2)/2 + 10, lw, lh2, logo)
+
+# Captions row
+caps = [
+    ("Primary lockup","The full mark: SM monogram crowning the SHLOMI MOR WIGS wordmark. Used on cover, packaging, signage and editorial."),
+    ("Reversed","For dark surfaces and editorial imagery the full mark is set in soft paper white. Always reserve quiet contrast around it."),
+    ("Monogram","The SM monogram alone. Used for stamps, favicons, embroidery, dust-bag corner marks and any small applications."),
+]
+for i, (h, b) in enumerate(caps):
+    cx = 72 + i*440
+    add_text(s, cx, 620, 200, 16, h, font=F_SANS, size=10,
+             color=C_INK, upper=True, tracking=200)
+    add_text(s, cx, 644, 400, 200, b, font=F_SANS, size=12,
+             color=C_INK, line_spacing=1.55)
+
+# ------- PAGE 07: LOGO CONSTRUCTION -------
+s = content_slide(7, "Construction & Clear Space", [
+    {"text":"Built on ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"x.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None)
+# Construction frame with logo
+add_rect(s, 72, 280, 760, 440, fill=C_CREAM, line=C_RULE)
+clw, clh = logo_size(target_h=240)
+add_image(s, 72 + (760-clw)/2, 280 + (440-clh)/2, clw, clh, f"{LOGO_DIR}/shlomi-mor-logo-black.png")
+# Grid lines (visualized)
+for i in range(1, 8):
+    x = 72 + (760/8)*i
+    add_line(s, x, 280, x, 720, color=C_RULE, weight=0.25)
+for i in range(1, 5):
+    y = 280 + (440/5)*i
+    add_line(s, 72, y, 832, y, color=C_RULE, weight=0.25)
+
+add_text(s, 880, 300, 480, 20, "Clear Space", font=F_SANS,
+         size=10, color=C_MUTE, upper=True, tracking=200)
+add_text(s, 880, 326, 480, 60, "x = height of the M stem", font=F_SERIF, size=22, color=C_INK)
+add_text(s, 880, 380, 480, 200,
+         "Reserve at least one x of empty space on all sides of the mark. This is a non-negotiable minimum — never crowd the logo with text, imagery or color blocks.",
+         font=F_SANS, size=13, color=C_INK, line_spacing=1.55)
+add_text(s, 880, 540, 480, 20, "Minimum Size", font=F_SANS,
+         size=10, color=C_MUTE, upper=True, tracking=200)
+add_text(s, 880, 566, 480, 60, "Digital 28 px · Print 16 mm", font=F_SERIF, size=22, color=C_INK)
+
+# ------- PAGE 08: LOGO MISUSE -------
+s = content_slide(8, "Misuse", [
+    {"text":"Please, ","font":F_SERIF,"size":64,"color":C_INK},
+    {"text":"don't.","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
+], "The logo is a quiet object. The following alterations damage its tone, legibility or accessibility — and are never permitted in brand communication.")
+# 6 misuse tiles
+misuses = [
+    ("01 · Never rotate", "Keep the mark upright."),
+    ("02 · Never stretch", "Always uniform scale."),
+    ("03 · Never low contrast", "Always legible."),
+    ("04 · Never add shadows", "The mark stands flat."),
+    ("05 · Never apply gradients", "Solid brand color only."),
+    ("06 · Never off-brand color", "Use approved palette."),
+]
+for i, (label, hint) in enumerate(misuses):
+    col = i % 3; row = i // 3
+    cx = 72 + col * 432
+    cy = 440 + row * 180
+    add_rect(s, cx, cy, 412, 160, fill=C_CREAM, line=C_RULE)
+    mw, mh = logo_size(target_h=80)
+    add_image(s, cx + (412-mw)/2, cy + 24, mw, mh, f"{LOGO_DIR}/shlomi-mor-logo-black.png")
+    add_text(s, cx+16, cy+128, 380, 14, label, font=F_SANS, size=10,
+             color=C_INK, upper=True, tracking=180)
+    add_text(s, cx+16, cy+146, 380, 14, hint, font=F_SANS, size=9,
+             color=C_MUTE, italic=True)
+    # X marker
+    add_oval(s, cx+412-32, cy+12, 24, 24, fill=C_INK)
+    add_text(s, cx+412-32, cy+12, 24, 24, "×", font=F_SANS, size=12,
+             color=C_PAPER, align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+
+# ------- PAGE 09: MAIN COLORS -------
+s = content_slide(9, "Color", [
+    {"text":"The main ","font":F_SERIF,"size":64,"color":C_INK},
+    {"text":"colors","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
+    {"text":".","font":F_SERIF,"size":64,"color":C_INK},
+], None)
+colors = [
+    ("Rich Dusty Rose","B68F90","182 · 143 · 144","30 · 47 · 36 · 11", C_ROSE),
+    ("Soft Powder Blush","FCE3E5","252 · 227 · 229","0 · 13 · 5 · 0", C_BLUSH),
+    ("Muted Antique Gold","A78D52","167 · 141 · 82","30 · 38 · 75 · 16", C_GOLD),
+    ("Soft Champagne","C9AC7F","201 · 172 · 127","20 · 30 · 53 · 5", C_CHAMPAGNE),
+    ("Signature Black","0E0E0E","14 · 14 · 14","0 · 0 · 0 · 95", C_INK),
+    ("Elegant Stone Gray","6E6663","110 · 102 · 99","48 · 50 · 51 · 38", C_GRAY),
+]
+sw_w = (1440 - 144 - 5*20) / 6
+for i, (name, hexv, rgb, cmyk, color) in enumerate(colors):
+    cx = 72 + i*(sw_w+20)
+    add_rect(s, cx, 320, sw_w, 280, fill=color, line=C_RULE)
+    add_text(s, cx, 620, sw_w, 16, name, font=F_SANS, size=10,
+             color=C_INK, upper=True, tracking=160)
+    add_text(s, cx, 640, sw_w, 12, f"#{hexv}", font=F_SANS, size=9, color=C_MUTE)
+    add_text(s, cx, 656, sw_w, 12, f"R {rgb}", font=F_SANS, size=9, color=C_MUTE)
+    add_text(s, cx, 672, sw_w, 12, f"C {cmyk}", font=F_SANS, size=9, color=C_MUTE)
+
+# ------- PAGE 10: COLOR USAGE -------
+s = content_slide(10, "Proportions", [
+    {"text":"How the ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"palette","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+    {"br":True},
+    {"text":"breathes.","font":F_SERIF,"size":56,"color":C_INK},
+], None)
+# Proportion bar
+add_text(s, 72, 360, 600, 16, "Recommended distribution",
+         font=F_SANS, size=10, color=C_MUTE, upper=True, tracking=200)
+totals = [(C_CREAM, "Paper Cream", 45), (C_INK, "Signature Black", 25),
+          (C_BLUSH, "Powder Blush", 15), (C_GOLD, "Antique Gold", 8),
+          (C_ROSE, "Dusty Rose", 5), (C_CHAMPAGNE, "Champagne", 2)]
+bx = 72
+for color, name, pct in totals:
+    w = (1440 - 144) * pct / 100
+    add_rect(s, bx, 400, w, 80, fill=color)
+    add_text(s, bx, 488, w, 14, f"{pct}%", font=F_SERIF, size=11, color=C_INK)
+    add_text(s, bx, 504, w, 14, name, font=F_SANS, size=8,
+             color=C_MUTE, upper=True, tracking=160)
+    bx += w
+add_text(s, 72, 600, 900, 100,
+         "Cream and black form the canvas. Blush and gold deliver warmth and luxury. Rose and champagne are reserved for accents and seasonal materials.",
+         font=F_SANS, size=13, color=C_INK, line_spacing=1.55)
+
+# ------- PAGE 11: DISPLAY SERIF -------
+s = content_slide(11, "Display Serif", [
+    {"text":"Headlines — ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"idot.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None)
+# Sample
+add_text(s, 72, 320, 700, 300, "AaBb", font=F_SERIF, size=180, color=C_INK)
+# Meta
+meta = [("Typeface","idot — high-contrast didone"),
+        ("Role","Headlines, covers, editorial titles"),
+        ("Mood","Vogue · Harper's Bazaar · Couture"),
+        ("Tracking","-1% to -2% at display sizes"),
+        ("Style mix","Roman for statements, italic for emphasis")]
+for i, (k, v) in enumerate(meta):
+    add_text(s, 850, 320+i*52, 200, 14, k, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=200)
+    add_text(s, 850, 340+i*52, 480, 16, v, font=F_SANS, size=13, color=C_INK)
+
+# ------- PAGE 12: FUNCTIONAL SANS -------
+s = content_slide(12, "Functional Sans", [
+    {"text":"Body & UI — ","font":F_SERIF,"size":52,"color":C_INK},
+    {"text":"Futura LT / Inter.","font":F_SERIF,"size":52,"color":C_INK,"italic":True},
+], None)
+add_text(s, 72, 320, 700, 300, "Aa Bb", font=F_SANS, size=160, color=C_INK)
+meta = [("Typeface","Futura LT — with Inter as digital alternative"),
+        ("Role","Body, captions, navigation, CTAs, microcopy"),
+        ("Mood","Clean, geometric, modern"),
+        ("Tracking","+22% for eyebrows · 0% for body"),
+        ("Weights","Light · Book · Medium · Bold")]
+for i, (k, v) in enumerate(meta):
+    add_text(s, 850, 320+i*52, 200, 14, k, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=200)
+    add_text(s, 850, 340+i*52, 480, 16, v, font=F_SANS, size=13, color=C_INK)
+
+# ------- PAGE 13: SCRIPT ACCENT -------
+s = content_slide(13, "Accent", [
+    {"text":"A whisper — ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"Sacramento.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None, bg=C_BLUSH)
+add_text(s, 72, 320, 700, 300, "she", font=F_SCRIPT, size=200,
+         color=C_GOLD, italic=True)
+meta = [("Typeface","Sacramento / Snell Roundhand"),
+        ("Role","Accent only — one or two words per page"),
+        ("Use cases","Hero accents · taglines · signatures · social"),
+        ("Color","Muted Antique Gold or Soft Champagne"),
+        ("Tracking","0%, never tracked or stretched")]
+for i, (k, v) in enumerate(meta):
+    add_text(s, 850, 320+i*52, 200, 14, k, font=F_SANS, size=10,
+             color=C_GRAY, upper=True, tracking=200)
+    add_text(s, 850, 340+i*52, 480, 16, v, font=F_SANS, size=13, color=C_INK)
+
+# ------- PAGE 14: HIERARCHY -------
+s = content_slide(14, "Pairing & Hierarchy", [
+    {"text":"How they ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"speak.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None)
+add_text(s, 72, 320, 1100, 16, "Eyebrow / 11 / 220",
+         font=F_SANS, size=10, color=C_MUTE, upper=True, tracking=200)
+add_text(s, 72, 344, 1100, 16, "HAND-CRAFTED IN NYC",
+         font=F_SANS, size=10, color=C_INK, upper=True, tracking=200)
+add_text(s, 72, 384, 1100, 100, "Display headline / 56 / Didot",
+         font=F_SANS, size=10, color=C_MUTE, upper=True, tracking=200)
+add_text(s, 72, 408, 1296, 100, "A wig that feels like you, only quieter.",
+         font=F_SERIF, size=56, color=C_INK)
+add_text(s, 72, 524, 1100, 16, "Body / 14 / 1.7",
+         font=F_SANS, size=10, color=C_MUTE, upper=True, tracking=200)
+add_text(s, 72, 548, 800, 200,
+         "Each piece is custom-made for the woman who wears it — European hair, hand-knotted lace, a private fitting. The work happens slowly; the result feels inevitable.",
+         font=F_SANS, size=14, color=C_INK, line_spacing=1.7)
+add_text(s, 72, 692, 1100, 16, "CTA / 12 / 180 / uppercase",
+         font=F_SANS, size=10, color=C_MUTE, upper=True, tracking=200)
+add_text(s, 72, 716, 400, 24, "Book Consultation →",
+         font=F_SANS, size=12, color=C_INK, upper=True, tracking=180, bold=True)
+
+# ------- PAGE 15: GRID -------
+s = content_slide(15, "Grid", [
+    {"text":"A quiet ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"twelve.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], "The book is built on a 12-column grid with a 72 px outer margin and a 24 px gutter, on a 1440 × 900 px stage. Each page is structured around an editorial silence — content occupies roughly 60% of the surface; the rest breathes.")
+# Visualize grid
+add_rect(s, 72, 400, 1296, 360, line=C_RULE)
+for i in range(1, 12):
+    x = 72 + (1296/12)*i
+    add_line(s, x, 400, x, 760, color=C_RULE, weight=0.25)
+add_text(s, 72, 768, 1296, 14, "12 columns · 72 px margin · 24 px gutter",
+         font=F_SANS, size=10, color=C_MUTE, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+
+# ------- PAGE 16: PHOTOGRAPHY -------
+s = content_slide(16, "Photography", [
+    {"text":"Light, ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"skin","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+    {"text":", silence.","font":F_SERIF,"size":56,"color":C_INK},
+], None)
+moods = [
+    ("Medical · Restoration","Warm window light. Hands, jewellery, the back of a neck. The wig as a quiet companion, not a performance."),
+    ("Luxury · Editorial","Studio lighting. Bare shoulders, ironed silk, the architecture of a face. The wig as couture, photographed like couture.")
+]
+for i, (h, b) in enumerate(moods):
+    cx = 72 + i * 660
+    add_rect(s, cx, 320, 620, 300, fill=C_CREAM, line=C_RULE)
+    add_text(s, cx+30, 340, 540, 16, h, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=200)
+    add_text(s, cx+30, 380, 540, 200, b,
+             font=F_SANS, size=13, color=C_INK, line_spacing=1.55)
+add_text(s, 72, 660, 1296, 100,
+         "Always shoot on neutral grounds — paper white, cream, clay. Never on saturated color. Models are calm, off-centre, never looking at the camera.",
+         font=F_SANS, size=13, color=C_INK, line_spacing=1.6)
+
+# ------- PAGE 17: TONE OF VOICE -------
+s = content_slide(17, "Tone of Voice", [
+    {"text":"Speak ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"softly.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None)
+pillars = [("Intimate","Like a fitting in a quiet room."),
+           ("Confident","Without ornament or proof."),
+           ("Editorial","Composed sentences, generous space."),
+           ("Empathic","Especially with the medical client.")]
+for i, (h, b) in enumerate(pillars):
+    cx = 72 + (i % 2) * 660
+    cy = 320 + (i // 2) * 180
+    add_text(s, cx, cy, 200, 16, h, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=200)
+    add_text(s, cx, cy+24, 540, 50, h, font=F_SERIF, size=28, color=C_INK)
+    add_text(s, cx, cy+70, 540, 100, b, font=F_SANS, size=14,
+             color=C_INK, italic=True, line_spacing=1.55)
+
+# ------- PAGE 18: APPLICATIONS -------
+s = content_slide(18, "Applications", [
+    {"text":"In the ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"world.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None)
+# Business card front
+add_rect(s, 72, 320, 320, 200, fill=C_CREAM, line=C_RULE)
+bclw, bclh = logo_size(target_h=70)
+add_image(s, 72 + (320-bclw)/2, 320 + (200-bclh)/2, bclw, bclh, f"{LOGO_DIR}/shlomi-mor-logo-black.png")
+add_text(s, 90, 488, 280, 14, "BUSINESS CARD · FRONT", font=F_SANS, size=9,
+         color=C_MUTE, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+# Business card back (black)
+add_rect(s, 410, 320, 320, 200, fill=C_INK)
+add_text(s, 430, 340, 280, 14, "Shlomi Mor", font=F_SERIF, size=22, color=C_PAPER)
+add_text(s, 430, 376, 280, 14, "Master Wigmaker · Owner", font=F_SANS,
+         size=9, color=RGBColor(0xC9,0xC4,0xBF), tracking=180, upper=True)
+add_text(s, 430, 470, 280, 14, "shlomimorwigs.com", font=F_SANS, size=9,
+         color=C_PAPER, tracking=180, upper=True)
+# Dust bag
+add_rect(s, 748, 320, 240, 200, fill=C_BLUSH)
+dlw, dlh = logo_size(target_h=70, mono=True)
+add_image(s, 748 + (240-dlw)/2, 320 + (200-dlh)/2, dlw, dlh, f"{LOGO_DIR}/shlomi-mor-monogram-black.png")
+add_text(s, 768, 488, 200, 14, "DUST BAG", font=F_SANS, size=9,
+         color=C_GRAY, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+# Instagram card
+add_rect(s, 1006, 320, 250, 250, fill=C_INK)
+ilw, ilh = logo_size(target_h=90, mono=True)
+add_image(s, 1006 + (250-ilw)/2, 320 + (250-ilh)/2 - 20, ilw, ilh, f"{LOGO_DIR}/shlomi-mor-monogram-white.png")
+add_text(s, 1006, 488, 250, 14, "@shlomimorwigs", font=F_SANS,
+         size=10, color=C_PAPER, align=PP_ALIGN.CENTER, tracking=180)
+add_text(s, 1006, 510, 250, 14, "SOCIAL · INSTAGRAM 1:1",
+         font=F_SANS, size=9, color=RGBColor(0xC9,0xC4,0xBF),
+         upper=True, tracking=200, align=PP_ALIGN.CENTER)
+# Ad banner mockup
+add_rect(s, 72, 580, 1184, 180, fill=C_CREAM, line=C_RULE)
+add_text(s, 110, 620, 600, 60, "A wig that feels like you, only quieter.",
+         font=F_SERIF, size=28, color=C_INK)
+add_text(s, 110, 690, 200, 24, "Book Consultation →",
+         font=F_SANS, size=11, color=C_INK, upper=True, tracking=180, bold=True)
+alw, alh = logo_size(target_h=100, mono=True)
+add_image(s, 1184-alw, 620, alw, alh, f"{LOGO_DIR}/shlomi-mor-monogram-black.png")
+add_text(s, 72, 776, 1184, 14, "AD BANNER · 1200 × 600",
+         font=F_SANS, size=9, color=C_MUTE, upper=True, tracking=200)
+
+# ------- PAGE 19: CONTACT -------
+s = prs.slides.add_slide(blank); add_bg(s, C_INK)
+rlw, rlh = logo_size(target_h=180, mono=True)
+add_image(s, (1440-rlw)/2, 240, rlw, rlh, f"{LOGO_DIR}/shlomi-mor-monogram-white.png")
+add_rich_text(s, 72, 500, 1296, 120, [
+    {"text":"Crown ","font":F_SCRIPT,"size":52,"color":C_CHAMPAGNE,"italic":True},
+    {"text":"your ","font":F_SERIF,"size":52,"color":C_PAPER,"italic":True},
+    {"text":"confidence.","font":F_SERIF,"size":52,"color":C_PAPER},
+], align=PP_ALIGN.CENTER)
+add_text(s, 72, 640, 1296, 16,
+         "shlomimorwigs.com   ·   info@shlomimorwigs.com   ·   @shlomimorwigs",
+         font=F_SANS, size=11, color=RGBColor(0xC9,0xC4,0xBF),
+         tracking=200, upper=True, align=PP_ALIGN.CENTER)
+add_text(s, 72, 680, 1296, 16,
+         "Shlomi Mor Wigs · 580 5th Avenue · New York, NY",
+         font=F_SANS, size=10, color=C_MUTE, tracking=200, upper=True,
+         align=PP_ALIGN.CENTER)
+add_text(s, 72, 832, 1296, 16,
+         "Brand Guidelines · Edition 01 · 2025",
+         font=F_SANS, size=10, color=C_MUTE, tracking=200, upper=True,
+         align=PP_ALIGN.CENTER)
+
+out = "/tmp/Shlomi-Mor-Wigs-Brand-Guidelines.pptx"
+prs.save(out)
+print("OK", out)
