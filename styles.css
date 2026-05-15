@@ -3,8 +3,84 @@
    Clean Luxury Editorial
    ========================================================= */
 
-/* -------- Fonts (substitutes for idot / Futura LT / Articulat CF) -------- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&family=Sacramento&display=swap');
+/* -------- Fonts ---------------------------------------------------------
+   Approved type system (per brand owner):
+     · idot                       — Display Serif (headlines)
+     · Futura LT / Articulat CF   — Functional Sans (body, UI)
+     · Sacramento                 — Script Accent (primary script)
+     · NellRoundhandLTW05-Script  — Script Accent (alternate)
+
+   Drop licensed font files (woff2 preferred) into ./assets/fonts/ using the
+   filenames below. Sacramento is loaded from Google Fonts as it is openly
+   licensed (OFL) and matches the agreed type list. No other typefaces are
+   permitted in this brand book.
+   --------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+
+@font-face {
+  font-family: 'idot';
+  src: url('assets/fonts/idot.woff2') format('woff2'),
+       url('assets/fonts/idot.woff')  format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'idot';
+  src: url('assets/fonts/idot-italic.woff2') format('woff2'),
+       url('assets/fonts/idot-italic.woff')  format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/futura-lt-light.woff2') format('woff2'),
+       url('assets/fonts/futura-lt-light.woff')  format('woff');
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/futura-lt-book.woff2') format('woff2'),
+       url('assets/fonts/futura-lt-book.woff')  format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'FuturaLT';
+  src: url('assets/fonts/futura-lt-medium.woff2') format('woff2'),
+       url('assets/fonts/futura-lt-medium.woff')  format('woff');
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ArticulatCF';
+  src: url('assets/fonts/articulat-cf-light.woff2') format('woff2'),
+       url('assets/fonts/articulat-cf-light.woff')  format('woff');
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ArticulatCF';
+  src: url('assets/fonts/articulat-cf-regular.woff2') format('woff2'),
+       url('assets/fonts/articulat-cf-regular.woff')  format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NellRoundhandLTW05-Script';
+  src: url('assets/fonts/NellRoundhandLTW05-Script.woff2') format('woff2'),
+       url('assets/fonts/NellRoundhandLTW05-Script.woff')  format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
 
 /* -------- Tokens -------- */
 :root {
@@ -22,10 +98,10 @@
   --c-rule:          #D9D2CB;
   --c-mute:          #8B8480;
 
-  /* Type */
-  --f-serif:    'Playfair Display', 'idot', 'Times New Roman', serif;
-  --f-sans:     'Jost', 'Futura LT', 'Articulat CF', 'Helvetica Neue', Arial, sans-serif;
-  --f-script:   'Sacramento', cursive;
+  /* Type — approved typefaces only */
+  --f-serif:    'idot', 'Times New Roman', Times, serif;
+  --f-sans:     'FuturaLT', 'Futura LT', 'Articulat CF', 'ArticulatCF', 'Helvetica Neue', Arial, sans-serif;
+  --f-script:   'Sacramento', 'NellRoundhandLTW05-Script', 'NellRoundhandLTW05Script', cursive;
 
   /* Grid */
   --page-w:  1440px;
@@ -273,6 +349,15 @@ img { max-width: 100%; display: block; }
   line-height: 1.2;
   color: var(--c-ink);
 }
+.cover__mark {
+  position: absolute;
+  left: 50%;
+  top: 72px;
+  transform: translateX(-50%);
+  width: 132px;
+  height: auto;
+  opacity: 0.95;
+}
 
 /* =========================================================
    Page 02 — TOC
@@ -505,6 +590,40 @@ img { max-width: 100%; display: block; }
 }
 .sm-monogram em { font-style: italic; }
 
+/* Real SVG logo embed */
+.brand-mark,
+.brand-monogram {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.logo-frame .brand-mark,
+.logo-frame .brand-monogram {
+  position: absolute;
+  inset: 18%;
+  width: auto;
+  height: auto;
+  max-width: 64%;
+  max-height: 64%;
+  margin: auto;
+}
+.logo-frame--blush .brand-monogram {
+  inset: 14%;
+  max-width: 56%;
+  max-height: 56%;
+}
+
+/* Sized variants for inline / mockup usage */
+.brand-mark--xs { width: 110px; height: auto; }
+.brand-mark--sm { width: 160px; height: auto; }
+.brand-mark--md { width: 220px; height: auto; }
+.brand-mark--lg { width: 320px; height: auto; }
+.brand-monogram--xs { width: 36px; height: auto; }
+.brand-monogram--sm { width: 64px; height: auto; }
+.brand-monogram--md { width: 96px; height: auto; }
+.brand-monogram--lg { width: 140px; height: auto; }
+
 /* Logo grid construction page */
 .construct {
   grid-column: 1 / -1;
@@ -544,8 +663,8 @@ img { max-width: 100%; display: block; }
 .misuse__card {
   background: var(--c-paper-cream);
   border: 1px solid var(--c-rule);
-  padding: 28px;
-  min-height: 180px;
+  padding: 20px;
+  height: 240px;
   display: flex; flex-direction: column; justify-content: space-between;
   position: relative;
 }
@@ -558,29 +677,42 @@ img { max-width: 100%; display: block; }
   display: flex; align-items: center; justify-content: center;
   font-family: var(--f-sans);
   font-size: 12px;
+  z-index: 2;
 }
 .misuse__card .demo {
   flex: 1;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--f-serif);
-  font-size: 24px;
-  letter-spacing: 0.2em;
-  color: var(--c-ink);
+  position: relative;
+  overflow: hidden;
 }
-.misuse__card .demo.tilt { transform: rotate(-8deg); }
-.misuse__card .demo.stretch { transform: scaleX(0.5); }
-.misuse__card .demo.outline {
-  -webkit-text-stroke: 1px var(--c-ink);
-  color: transparent;
+.misuse__card .demo--logo img {
+  width: 80%;
+  max-height: 86%;
+  height: auto;
+  object-fit: contain;
 }
-.misuse__card .demo.shadow { text-shadow: 4px 4px 0 rgba(167,141,82,0.6); }
-.misuse__card .demo.gradient {
+.misuse__card .demo--tilt img    { transform: rotate(-9deg); }
+.misuse__card .demo--stretch img { transform: scaleX(0.55); }
+.misuse__card .demo--shadow img  { filter: drop-shadow(4px 4px 0 rgba(167,141,82,0.6)); }
+.misuse__card .demo--recolor img {
+  filter: brightness(0) saturate(100%) invert(33%) sepia(86%) saturate(2300%) hue-rotate(338deg);
+}
+/* Low contrast misuse */
+.misuse__card .demo--faded {
+  background: var(--c-paper-cream);
+}
+.misuse__card .demo--faded img { opacity: 0.22; }
+/* Gradient: render logo silhouette as off-brand gradient via mask */
+.misuse__card .demo--gradient { position: relative; }
+.misuse__card .demo--gradient img { visibility: hidden; }
+.misuse__card .demo--gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: linear-gradient(90deg, var(--c-dusty-rose), var(--c-antique-gold));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-mask: url("assets/logo/shlomi-mor-logo-black.svg") center / 80% auto no-repeat;
+          mask: url("assets/logo/shlomi-mor-logo-black.svg") center / 80% auto no-repeat;
 }
-.misuse__card .demo.recolor { color: #d24747; }
 
 /* =========================================================
    Colors page (reference layout)
@@ -992,6 +1124,17 @@ img { max-width: 100%; display: block; }
   border-color: transparent;
   display: flex; align-items: center; justify-content: center;
   text-align: center;
+  padding: 24px;
+}
+.bcard--back .brand-mark {
+  width: 70%;
+  height: auto;
+  max-height: 78%;
+}
+.tote .brand-mark {
+  width: 60%;
+  height: auto;
+  max-height: 78%;
 }
 .bcard__name {
   font-family: var(--f-serif);
@@ -1109,7 +1252,11 @@ img { max-width: 100%; display: block; }
 .contact__mark {
   display: flex; align-items: center; justify-content: flex-start;
 }
-.contact__mark .sm-logo .row1 { color: inherit; }
+.contact__mark img {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+}
 .contact__info dt {
   text-transform: uppercase;
   font-family: var(--f-sans);
