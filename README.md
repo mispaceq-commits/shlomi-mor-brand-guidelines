@@ -9,6 +9,9 @@ The guidelines cover:
 - Color palette (main + applications)
 - Typography (idot / Futura LT / Inter / Sacramento / Snell Roundhand)
 - Grid, photography direction, tone of voice
+- Pattern system (monogram field, hairline lattice, script watermark, strand texture)
+- Type specimen, UI kit and H1–H6 hierarchy
+- Instagram grid architecture, stories & reels templates, caption tone
 - Applications and brand contact
 
 ## Running locally
@@ -45,4 +48,4 @@ The full Futura LT package (including Condensed and Heavy/ExtraBold variants) is
 
 ## Export to PDF
 
-The book is print-ready: each `.page` section is sized at 1440 × 900 px, and Chromium's `Print → Save as PDF` (or the bundled `make_pdf.py` script) produces a 19-page PDF with vector text and SVG logos that opens cleanly in Adobe Illustrator for further editing.
+The book is print-ready: each `.page` section is sized at 1440 × 900 px, and Chromium's `Print → Save as PDF` (or the bundled `make_pdf.py` script) produces a 24-page PDF with vector text and SVG logos that opens cleanly in Adobe Illustrator for further editing.
