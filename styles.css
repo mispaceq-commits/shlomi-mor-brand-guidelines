@@ -1318,15 +1318,15 @@ img { max-width: 100%; display: block; }
 .pattern-tile--monogram {
   background-image: url("assets/logo/shlomi-mor-monogram-black.svg");
   background-repeat: repeat;
-  background-size: 56px auto;
+  background-size: 32px auto;
+  background-position: 0 0;
   background-color: var(--c-paper-cream);
-  background-blend-mode: multiply;
   position: relative;
 }
 .pattern-tile--monogram::before {
   content: "";
   position: absolute; inset: 0;
-  background: rgba(251,248,244,0.86);
+  background: rgba(251,248,244,0.94);
   z-index: 0;
 }
 .pattern-tile--monogram > * { position: relative; z-index: 2; }
@@ -1603,7 +1603,7 @@ img { max-width: 100%; display: block; }
    Instagram pages (21 & 22)
    ========================================================= */
 .ig-grid {
-  grid-column: 1 / 8;
+  grid-column: 1 / 7;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
