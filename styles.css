@@ -1318,7 +1318,7 @@ img { max-width: 100%; display: block; }
 .pattern-tile--monogram {
   background-image: url("assets/logo/shlomi-mor-monogram-tile.svg");
   background-repeat: repeat;
-  background-size: 110px auto;
+  background-size: 88px auto;
   background-position: 0 0;
   background-color: var(--c-paper-cream);
   position: relative;
