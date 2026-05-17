@@ -1,6 +1,6 @@
 """
 Build an editable PowerPoint version of the Shlomi Mor Wigs brand book.
-Each of the 19 pages becomes one slide with native text boxes and embedded
+Each of the 24 pages becomes one slide with native text boxes and embedded
 logo images. Fonts: idot (Didot) / Futura LT / Snell Roundhand.
 """
 from pptx import Presentation
@@ -224,22 +224,26 @@ toc_items = [
     ("13","Script Accent — Sacramento / Snell Roundhand"),
     ("14","Hierarchy & Pairing"),("15","Grid System"),
     ("16","Photography Direction"),("17","Tone of Voice"),
-    ("18","Applications"),("19","Contact & Credits"),
+    ("18","Patterns — The System"),("19","Patterns — Rules & Application"),
+    ("20","Type Specimen & UI Kit"),
+    ("21","Instagram — Grid Architecture"),
+    ("22","Instagram — Stories, Reels & Captions"),
+    ("23","Applications"),("24","Contact & Credits"),
 ]
 s = content_slide(2, "Contents", [
     {"text":"Table of ","font":F_SERIF,"size":64,"color":C_INK},
     {"text":"contents.","font":F_SERIF,"size":64,"color":C_INK,"italic":True},
-], "A nineteen-section brand book covering identity foundations, visual language and brand applications. Designed to be read in sequence, referenced as a system.")
-# Two columns of TOC
+], "A twenty-four-section brand book covering identity foundations, visual language and brand applications. Designed to be read in sequence, referenced as a system.")
+# Three columns of TOC (8 rows each)
 col_y_start = 360
 for i, (num, name) in enumerate(toc_items):
-    col = i // 10
-    row = i % 10
-    cx = 72 + col * 660
-    cy = col_y_start + row * 42
+    col = i // 8
+    row = i % 8
+    cx = 72 + col * 432
+    cy = col_y_start + row * 44
     add_text(s, cx, cy, 36, 24, num, font=F_SANS, size=10, color=C_MUTE, tracking=160)
-    add_text(s, cx+44, cy, 540, 24, name, font=F_SERIF, size=18, color=C_INK)
-    add_line(s, cx, cy+30, cx+600, cy+30)
+    add_text(s, cx+44, cy, 360, 24, name, font=F_SERIF, size=16, color=C_INK)
+    add_line(s, cx, cy+32, cx+400, cy+32)
 
 # ------- PAGE 03: WELCOME -------
 content_slide(3, "Welcome", [
@@ -564,8 +568,386 @@ for i, (h, b) in enumerate(pillars):
     add_text(s, cx, cy+70, 540, 100, b, font=F_SANS, size=14,
              color=C_INK, italic=True, line_spacing=1.55)
 
-# ------- PAGE 18: APPLICATIONS -------
-s = content_slide(18, "Applications", [
+# ============================================================
+# PAGE 18: PATTERNS · THE SYSTEM
+# ============================================================
+s = content_slide(18, "Patterns", [
+    {"text":"A quiet ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"repeat.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+],
+"Four discreet patterns extend the brand beyond the logo — for endpapers, dust-bag interiors, packaging linings, story backgrounds and stationery. Each is built from a single brand asset and is meant to be felt, never read.",
+   foot="The system — four discreet repeats")
+
+# 2x2 grid of pattern tiles
+tile_w = 636; tile_h = 174
+tiles_18 = [
+    (72,  430, "01 — Monogram Field",  "monogram"),
+    (732, 430, "02 — Hairline Lattice", "lattice"),
+    (72,  624, "03 — Script Watermark", "script"),
+    (732, 624, "04 — Strand Texture",   "strand"),
+]
+for tx, ty, label, kind in tiles_18:
+    add_rect(s, tx, ty, tile_w, tile_h, fill=C_CREAM, line=C_RULE)
+    add_text(s, tx+22, ty+18, 400, 14, label, font=F_SANS, size=10,
+             color=C_INK, upper=True, tracking=200)
+    if kind == "monogram":
+        mlw, mlh = logo_size(target_h=14, mono=True)
+        for col in range(7):
+            for row in range(3):
+                rx = tx + 70 + col * 80 + (row % 2) * 30
+                ry = ty + 60 + row * 38
+                img = add_image(s, rx, ry, mlw, mlh, f"{LOGO_DIR}/shlomi-mor-monogram-black.png")
+                img.rotation = -22
+    elif kind == "lattice":
+        # Diagonal cross-hatch
+        for d in range(-12, 18):
+            x0 = tx + d * 26
+            add_line(s, x0,           ty+20, x0+tile_h-40, ty+tile_h-20, color=C_GOLD, weight=0.4)
+            add_line(s, x0,           ty+tile_h-20, x0+tile_h-40, ty+20, color=C_GOLD, weight=0.4)
+    elif kind == "script":
+        add_text(s, tx+34, ty+58, 580, 28, "crown · confidence · she · crown",
+                 font=F_SCRIPT, size=26, color=C_GOLD, italic=True)
+        add_text(s, tx+88, ty+102, 580, 28, "she · crown · confidence · she",
+                 font=F_SCRIPT, size=26, color=C_GOLD, italic=True)
+    elif kind == "strand":
+        for i in range(7):
+            sx = tx + 30 + i*85
+            add_line(s, sx,    ty+40,  sx+70, ty+tile_h-20, color=C_GOLD, weight=0.5)
+            add_line(s, sx+10, ty+30,  sx+80, ty+tile_h-30, color=C_GOLD, weight=0.5)
+
+# ============================================================
+# PAGE 19: PATTERNS · RULES & APPLICATION
+# ============================================================
+s = content_slide(19, "Patterns", [
+    {"text":"Where it ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"lives.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None, foot="Rules & application")
+
+# Four small mock tiles in a row at y=300
+mock_w = 306; mock_h = 200
+mocks_19 = [
+    (72,  300, "Dust-bag interior · Monogram field", "monogram-mock", "she"),
+    (402, 300, "Thank-you card · Hairline lattice",  "lattice-mock", "Thank you"),
+    (732, 300, "IG story background · Script",       "script-mock", "Crown"),
+    (1062,300, "Box endpaper · Strand texture",      "strand-mock", "M"),
+]
+for mx, my, label, kind, sample in mocks_19:
+    if kind == "strand-mock":
+        add_rect(s, mx, my, mock_w, mock_h, fill=C_INK)
+        # subtle strand lines on dark
+        for i in range(5):
+            sx = mx + 20 + i*60
+            add_line(s, sx, my+20, sx+50, my+mock_h-20, color=C_CHAMPAGNE, weight=0.4)
+        mlw, mlh = logo_size(target_h=66, mono=True)
+        add_image(s, mx + (mock_w-mlw)/2, my + (mock_h-mlh)/2, mlw, mlh,
+                  f"{LOGO_DIR}/shlomi-mor-monogram-white.png")
+        add_text(s, mx, my+mock_h+14, mock_w, 16, label, font=F_SANS, size=9,
+                 color=C_MUTE, upper=True, tracking=200)
+    else:
+        add_rect(s, mx, my, mock_w, mock_h, fill=C_CREAM, line=C_RULE)
+        # Background hint by pattern type
+        if kind == "monogram-mock":
+            mlw, mlh = logo_size(target_h=14, mono=True)
+            for col in range(5):
+                for row in range(3):
+                    rx = mx + 30 + col * 60 + (row % 2) * 20
+                    ry = my + 40 + row * 44
+                    img = add_image(s, rx, ry, mlw, mlh, f"{LOGO_DIR}/shlomi-mor-monogram-black.png")
+                    img.rotation = -22
+            add_text(s, mx+90, my+80, 140, 50, sample, font=F_SCRIPT, size=36,
+                     color=C_INK, italic=True, align=PP_ALIGN.CENTER)
+        elif kind == "lattice-mock":
+            for d in range(-8, 16):
+                x0 = mx + d * 24
+                add_line(s, x0, my+20, x0+mock_h-40, my+mock_h-20, color=C_GOLD, weight=0.35)
+                add_line(s, x0, my+mock_h-20, x0+mock_h-40, my+20, color=C_GOLD, weight=0.35)
+            add_text(s, mx+24, my+72, mock_w-48, 30, sample, font=F_SERIF, size=22,
+                     color=C_INK, align=PP_ALIGN.CENTER)
+            add_text(s, mx+24, my+108, mock_w-48, 30, "Shlomi", font=F_SERIF, size=22,
+                     color=C_INK, italic=True, align=PP_ALIGN.CENTER)
+        elif kind == "script-mock":
+            add_text(s, mx+10, my+50, mock_w-20, 28, "crown · confidence · she",
+                     font=F_SCRIPT, size=22, color=C_GOLD, italic=True)
+            add_text(s, mx+30, my+90, mock_w-20, 28, "she · crown · confidence",
+                     font=F_SCRIPT, size=22, color=C_GOLD, italic=True)
+            add_text(s, mx+24, my+70, mock_w-48, 40, sample, font=F_SERIF, size=22,
+                     color=C_INK, italic=True, align=PP_ALIGN.CENTER)
+            add_text(s, mx+24, my+102, mock_w-48, 40, "your confidence",
+                     font=F_SERIF, size=22, color=C_INK, italic=True, align=PP_ALIGN.CENTER)
+        add_text(s, mx, my+mock_h+14, mock_w, 16, label, font=F_SANS, size=9,
+                 color=C_MUTE, upper=True, tracking=200)
+
+# Rules row at y=560
+add_line(s, 72, 552, 1368, 552)
+rules_19 = [
+    ("Scale",       "Monogram tile 48–72 px on stationery, 96–128 px on packaging. Never below 32 px on print."),
+    ("Opacity",     "8–14% on cream surfaces, 18–22% on ink. Always sit at least one tone below the foreground."),
+    ("Color rules", "Antique Gold or Ink only. Never tint with Dusty Rose, Champagne or Blush — those are voice colors, not pattern colors."),
+    ("Never",       "Never on portraits, never over the logo, never mix two patterns on one surface, never animate on web."),
+]
+for i, (head, body) in enumerate(rules_19):
+    cx = 72 + i * 324
+    add_text(s, cx, 572, 280, 16, head, font=F_SANS, size=10,
+             color=C_INK, upper=True, tracking=200)
+    add_text(s, cx, 600, 300, 200, body, font=F_SANS, size=12,
+             color=C_INK, line_spacing=1.55)
+
+# ============================================================
+# PAGE 20: TYPE SPECIMEN & UI KIT
+# ============================================================
+s = content_slide(20, "Specimen", [
+    {"text":"The ideal ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"stack.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None, foot="Specimen & UI Kit")
+
+# Left column — typographic stack
+add_text(s, 72, 280, 540, 16, "Hand-crafted in NYC", font=F_SANS, size=11,
+         color=C_INK, upper=True, tracking=320)
+add_text(s, 72, 310, 540, 50, "virgin european", font=F_SCRIPT, size=32,
+         color=C_GOLD, italic=True)
+add_text(s, 72, 358, 540, 80, "Couture for the hairline.",
+         font=F_SERIF, size=44, color=C_INK)
+add_text(s, 72, 432, 540, 40, "A wig that feels like you, only quieter.",
+         font=F_SERIF, size=22, color=C_INK, italic=True)
+add_text(s, 72, 480, 540, 100,
+         "Each piece is hand-ventilated in our New York atelier, knot by knot — a hairline that disappears into skin, a parting that moves like memory.",
+         font=F_SANS, size=13, color=C_INK, line_spacing=1.55)
+# Primary button mock
+add_rect(s, 72, 588, 200, 38, fill=C_INK)
+add_text(s, 72, 596, 200, 24, "BOOK CONSULTATION", font=F_SANS, size=11,
+         color=C_PAPER, upper=True, tracking=220, bold=True, align=PP_ALIGN.CENTER)
+
+# Right column — UI Kit (2x2 grid)
+ui_cells = [
+    (660, 280, "Buttons"),
+    (1018, 280, "Tags & badges"),
+    (660, 432, "Form field"),
+    (1018, 432, "Pull-quote"),
+]
+for cx, cy, label in ui_cells:
+    add_rect(s, cx, cy, 332, 138, fill=C_PAPER, line=C_RULE)
+    add_text(s, cx+18, cy+14, 300, 14, label, font=F_SANS, size=10,
+             color=C_MUTE, upper=True, tracking=220)
+# Buttons cell content
+add_rect(s, 660+18, 280+42, 130, 32, fill=C_INK)
+add_text(s, 660+18, 280+48, 130, 24, "PRIMARY CTA", font=F_SANS, size=10,
+         color=C_PAPER, upper=True, tracking=220, bold=True, align=PP_ALIGN.CENTER)
+add_rect(s, 660+158, 280+42, 130, 32, fill=None, line=C_INK)
+add_text(s, 660+158, 280+48, 130, 24, "SECONDARY", font=F_SANS, size=10,
+         color=C_INK, upper=True, tracking=220, bold=True, align=PP_ALIGN.CENTER)
+add_text(s, 660+18, 280+88, 290, 18, "read the story →", font=F_SANS, size=11,
+         color=C_INK, italic=True)
+# Tags cell content
+add_rect(s, 1018+18, 280+44, 56, 22, fill=None, line=C_INK)
+add_text(s, 1018+18, 280+48, 56, 18, "NEW", font=F_SANS, size=9,
+         color=C_INK, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+add_rect(s, 1018+82, 280+44, 130, 22, fill=C_GOLD)
+add_text(s, 1018+82, 280+48, 130, 18, "MEDICAL STREAM", font=F_SANS, size=9,
+         color=C_PAPER, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+add_rect(s, 1018+220, 280+44, 80, 22, fill=C_INK)
+add_text(s, 1018+220, 280+48, 80, 18, "CUSTOM", font=F_SANS, size=9,
+         color=C_PAPER, upper=True, tracking=200, align=PP_ALIGN.CENTER)
+add_text(s, 1018+18, 280+86, 290, 18,
+         "Use sparingly — one per surface, never more than two per page.",
+         font=F_SANS, size=10, color=C_MUTE, italic=True, line_spacing=1.4)
+# Form field cell
+add_text(s, 660+18, 432+44, 290, 16, "Your email", font=F_SANS, size=10,
+         color=C_MUTE, upper=True, tracking=220)
+add_text(s, 660+18, 432+66, 290, 28, "name@studio.com", font=F_SERIF,
+         size=18, color=C_INK, italic=True)
+add_line(s, 660+18, 432+98, 660+18+290, 432+98, color=C_INK, weight=0.8)
+add_text(s, 660+18, 432+106, 290, 18, "Underlined italic · 32 px field height",
+         font=F_SANS, size=9, color=C_MUTE, italic=True)
+# Pull-quote cell
+add_rich_text(s, 1018+18, 432+42, 290, 80, [
+    {"text":"\u201cShe felt like herself, only ","font":F_SERIF,"size":18,"color":C_INK,"italic":True},
+    {"text":"quieter","font":F_SCRIPT,"size":24,"color":C_GOLD,"italic":True},
+    {"text":".\u201d","font":F_SERIF,"size":18,"color":C_INK,"italic":True},
+])
+
+# Hierarchy table at bottom (y=600)
+add_line(s, 660, 588, 1368, 588)
+hier_y = 600
+add_text(s, 660, hier_y, 200, 16, "Role", font=F_SANS, size=9,
+         color=C_MUTE, upper=True, tracking=200)
+add_text(s, 860, hier_y, 220, 16, "Family", font=F_SANS, size=9,
+         color=C_MUTE, upper=True, tracking=200)
+add_text(s, 1080, hier_y, 160, 16, "Size / line", font=F_SANS, size=9,
+         color=C_MUTE, upper=True, tracking=200)
+add_text(s, 1240, hier_y, 120, 16, "Tracking", font=F_SANS, size=9,
+         color=C_MUTE, upper=True, tracking=200)
+hier_rows = [
+    ("H1 · Display","idot · Regular","72 / 76","-0.005em"),
+    ("H2 · Section","idot · Italic","48 / 52","-0.005em"),
+    ("H3 · Sub","idot · Regular","32 / 38","0"),
+    ("Body","Futura LT · Light","15 / 26","0"),
+    ("Eyebrow","Futura LT · Medium","11 / 16","+0.32em"),
+    ("CTA","Futura LT · Medium","12 / 16","+0.18em"),
+]
+for i, (role, family, size_line, tracking) in enumerate(hier_rows):
+    ry = hier_y + 22 + i * 26
+    add_text(s, 660, ry, 200, 18, role, font=F_SANS, size=11, color=C_INK)
+    add_text(s, 860, ry, 220, 18, family, font=F_SANS, size=11, color=C_INK)
+    add_text(s, 1080, ry, 160, 18, size_line, font=F_SANS, size=11, color=C_INK)
+    add_text(s, 1240, ry, 120, 18, tracking, font=F_SANS, size=11, color=C_INK)
+    add_line(s, 660, ry+22, 1368, ry+22, color=C_RULE, weight=0.25)
+
+# ============================================================
+# PAGE 21: INSTAGRAM · GRID ARCHITECTURE
+# ============================================================
+s = content_slide(21, "Instagram", [
+    {"text":"Quiet, in ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"nine tiles.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+],
+"With 50k+ followers, the grid is our biggest storefront. It rotates three voices — portrait, word, detail — on a 3-3-3 rhythm, so the profile reads as one editorial spread, not nine separate posts.",
+   foot="Grid & profile anatomy")
+
+# 3x3 grid on the left
+grid_x = 72; grid_y = 420; tile_size = 132; gap = 6
+grid_tiles = [
+    (C_CREAM,  "01 · Portrait",  None, None),
+    (C_BLUSH,  "02 · Quote",     "crown\nyours", "script-gold"),
+    (C_ROSE,   "03 · Detail",    None, None),
+    (C_INK,    "04 · Monogram",  "logo", "monogram-white"),
+    (C_BLUSH,  "05 · Portrait",  None, None),
+    (C_GOLD,   "06 · Detail",    None, None),
+    (C_GRAY,   "07 · Portrait",  None, None),
+    (C_BLUSH,  "08 · Quote",     "She,\nagain.", "serif-italic"),
+    (C_INK,    "09 · Detail",    None, None),
+]
+for i, (color, cap, sample, kind) in enumerate(grid_tiles):
+    col = i % 3; row = i // 3
+    tx = grid_x + col * (tile_size + gap)
+    ty = grid_y + row * (tile_size + gap)
+    add_rect(s, tx, ty, tile_size, tile_size, fill=color)
+    cap_color = C_PAPER if color in (C_INK, C_GOLD, C_ROSE, C_GRAY) else C_MUTE
+    add_text(s, tx+8, ty+tile_size-22, tile_size-16, 14, cap, font=F_SANS,
+             size=8, color=cap_color, upper=True, tracking=160)
+    if kind == "script-gold":
+        add_text(s, tx+16, ty+30, tile_size-32, 80, sample, font=F_SCRIPT,
+                 size=22, color=C_GOLD, italic=True, align=PP_ALIGN.CENTER)
+    elif kind == "monogram-white":
+        mlw, mlh = logo_size(target_h=54, mono=True)
+        add_image(s, tx + (tile_size-mlw)/2, ty + (tile_size-mlh)/2 - 6, mlw, mlh,
+                  f"{LOGO_DIR}/shlomi-mor-monogram-white.png")
+    elif kind == "serif-italic":
+        add_text(s, tx+12, ty+30, tile_size-24, 60, sample, font=F_SERIF,
+                 size=16, color=C_INK, italic=True, align=PP_ALIGN.CENTER)
+
+# Right column — profile anatomy + highlights
+prof_x = 700
+# Avatar
+add_oval(s, prof_x, 420, 78, 78, fill=C_CREAM, line=C_RULE)
+mlw, mlh = logo_size(target_h=46, mono=True)
+add_image(s, prof_x + (78-mlw)/2, 420 + (78-mlh)/2, mlw, mlh,
+          f"{LOGO_DIR}/shlomi-mor-monogram-black.png")
+# Handle + bio
+add_text(s, prof_x+96, 422, 540, 22, "shlomimorwigs", font=F_SANS, size=14,
+         color=C_INK, bold=True)
+add_text(s, prof_x+96, 446, 540, 16, "50.4k followers · NYC atelier",
+         font=F_SANS, size=9, color=C_MUTE, upper=True, tracking=220)
+add_text(s, prof_x+96, 472, 540, 50,
+         "Custom human-hair wigs, handmade in New York. Crown your confidence. → shlomimorwigs.com",
+         font=F_SANS, size=12, color=C_INK, line_spacing=1.5)
+# Highlight covers
+add_text(s, prof_x, 552, 540, 16, "Highlight covers", font=F_SANS, size=10,
+         color=C_MUTE, upper=True, tracking=220)
+highlights = [
+    (C_CREAM, "Atelier",      C_INK),
+    (C_INK,   "Medical",      C_PAPER),
+    (C_GOLD,  "Custom",       C_PAPER),
+    (C_BLUSH, "Before / After",C_INK),
+    (C_CREAM, "Press",        C_INK),
+    (C_INK,   "Care",         C_PAPER),
+]
+hc_size = 72
+for i, (fill, label, txt_color) in enumerate(highlights):
+    col = i % 3; row = i // 3
+    hx = prof_x + col * (hc_size + 18)
+    hy = 580 + row * (hc_size + 18)
+    border = C_RULE if fill in (C_CREAM, C_BLUSH) else None
+    add_oval(s, hx, hy, hc_size, hc_size, fill=fill, line=border)
+    add_text(s, hx, hy + (hc_size-18)/2, hc_size, 22, label, font=F_SERIF,
+             size=10, color=txt_color, italic=True, align=PP_ALIGN.CENTER,
+             anchor=MSO_ANCHOR.MIDDLE)
+
+# ============================================================
+# PAGE 22: INSTAGRAM · STORIES & REELS
+# ============================================================
+s = content_slide(22, "Instagram", [
+    {"text":"Stories, ","font":F_SERIF,"size":56,"color":C_INK},
+    {"text":"in motion.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
+], None, foot="Stories · Reels · Cadence")
+
+# 4 vertical 9:16 mock frames
+story_w = 200; story_h = 330  # 1.65 ratio (close enough to 9:16 = 1.78)
+stories = [
+    (72,  308, C_CREAM, "Quote", "script", None, C_INK),
+    (388, 308, C_ROSE,  "Behind the scenes", "bts", None, C_PAPER),
+    (704, 308, C_INK,   "FAQ", "faq", None, C_PAPER),
+    (1020,308, C_GRAY,  "Reels · Cover", "reels", "0:32", C_PAPER),
+]
+for sx, sy, fill, top_label, kind, foot_label, fg in stories:
+    add_rect(s, sx, sy, story_w, story_h, fill=fill)
+    # Top eyebrow
+    top_color = fg if fg != C_INK else C_MUTE
+    add_text(s, sx+14, sy+14, story_w-28, 14, top_label, font=F_SANS, size=8,
+             color=top_color, upper=True, tracking=220)
+    if kind == "script":
+        add_text(s, sx+14, sy+130, story_w-28, 40, "she, again.",
+                 font=F_SCRIPT, size=30, color=C_INK, italic=True, align=PP_ALIGN.CENTER)
+        add_text(s, sx+18, sy+180, story_w-36, 60,
+                 "A hairline that disappears into skin.",
+                 font=F_SERIF, size=12, color=C_INK, italic=True,
+                 line_spacing=1.35, align=PP_ALIGN.CENTER)
+    elif kind == "bts":
+        add_rich_text(s, sx+14, sy+140, story_w-28, 90, [
+            {"text":"Knot by\n","font":F_SERIF,"size":22,"color":C_PAPER},
+            {"text":"knot.","font":F_SERIF,"size":22,"color":C_PAPER,"italic":True},
+        ])
+        add_text(s, sx+14, sy+story_h-44, story_w-28, 14, "Atelier · NYC",
+                 font=F_SANS, size=8, color=C_PAPER, upper=True, tracking=220)
+    elif kind == "faq":
+        add_text(s, sx+14, sy+130, story_w-28, 16, "Question 03",
+                 font=F_SANS, size=8, color=C_CHAMPAGNE, upper=True, tracking=240)
+        add_text(s, sx+14, sy+156, story_w-28, 60,
+                 "How long does a fitting take?",
+                 font=F_SERIF, size=15, color=C_PAPER, italic=True, line_spacing=1.25)
+        add_text(s, sx+14, sy+228, story_w-28, 60,
+                 "About ninety minutes. We start with listening.",
+                 font=F_SANS, size=10, color=C_PAPER, line_spacing=1.55)
+    elif kind == "reels":
+        add_rich_text(s, sx+14, sy+140, story_w-28, 90, [
+            {"text":"Crown\nyour ","font":F_SERIF,"size":20,"color":C_PAPER},
+            {"text":"confidence","font":F_SCRIPT,"size":32,"color":C_CHAMPAGNE,"italic":True},
+        ])
+        if foot_label:
+            add_text(s, sx+14, sy+story_h-30, story_w-28, 16,
+                     f"Episode 04 · {foot_label}", font=F_SANS, size=8,
+                     color=C_PAPER, upper=True, tracking=220)
+    # Caption below
+    add_text(s, sx, sy+story_h+14, story_w, 16, top_label, font=F_SANS,
+             size=9, color=C_MUTE, upper=True, tracking=200)
+
+# Rules row at y=680
+add_line(s, 72, 672, 1368, 672)
+rules_22 = [
+    ("Caption tone","3–5 short sentences. Lower-case for warmth, full stops always. No emoji. Em-dash and middle-dot welcome."),
+    ("Hashtags",    "3 brand · 3 niche · 3 NYC. e.g. #shlomimorwigs #crownyourconfidence #customwigs #medicalwigs #nycatelier"),
+    ("Cadence",     "4 grid posts / week · 5–7 stories / day · 1 reel / week. Tuesday + Friday are story-heavy days."),
+    ("Safe zones",  "Story 1080×1920. Keep type 220 px from top, 320 px from bottom. Reels cover 1080×1920, centered lockup."),
+]
+for i, (head, body) in enumerate(rules_22):
+    cx = 72 + i * 324
+    add_text(s, cx, 692, 280, 16, head, font=F_SANS, size=10,
+             color=C_INK, upper=True, tracking=200)
+    add_text(s, cx, 720, 300, 90, body, font=F_SANS, size=11,
+             color=C_INK, line_spacing=1.5)
+
+# ============================================================
+# PAGE 23: APPLICATIONS (was page 18 in 19-page edition)
+# ============================================================
+s = content_slide(23, "Applications", [
     {"text":"In the ","font":F_SERIF,"size":56,"color":C_INK},
     {"text":"world.","font":F_SERIF,"size":56,"color":C_INK,"italic":True},
 ], None)
