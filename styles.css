@@ -1316,18 +1316,12 @@ img { max-width: 100%; display: block; }
 
 /* 01 — Monogram field */
 .pattern-tile--monogram {
-  background-image: url("assets/logo/shlomi-mor-monogram-black.svg");
+  background-image: url("assets/logo/shlomi-mor-monogram-tile.svg");
   background-repeat: repeat;
-  background-size: 32px auto;
+  background-size: 110px auto;
   background-position: 0 0;
   background-color: var(--c-paper-cream);
   position: relative;
-}
-.pattern-tile--monogram::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: rgba(251,248,244,0.94);
-  z-index: 0;
 }
 .pattern-tile--monogram > * { position: relative; z-index: 2; }
 
