@@ -66,30 +66,24 @@ pasting) before saving.
 
 ## Hosting the images
 
-Gmail only renders images from publicly-reachable HTTPS URLs. The shipped
-`signature.html` uses two image hosts:
+Gmail only renders images from publicly-reachable HTTPS URLs. Every image in
+the shipped `signature.html` is served from the brand's Cloudinary CDN
+(`dnickckih`), so the file is fully portable and works the moment it is
+opened — no merge or repo deploy required.
 
-- **Logo** is served from Cloudinary at
-  `https://res.cloudinary.com/dnickckih/image/upload/v1779125002/shlomi-mor-logo_abmf6k.png`.
-  This is the brand's existing CDN and the URL works immediately.
-- **Line icons + CTA arrow** are served from `raw.githubusercontent.com` on the
-  `main` branch of this repo. They start returning 200 the moment this PR is
-  merged to `main`.
+| Asset            | URL                                                                                                  |
+|------------------|------------------------------------------------------------------------------------------------------|
+| Logo             | `https://res.cloudinary.com/dnickckih/image/upload/v1779125002/shlomi-mor-logo_abmf6k.png`           |
+| Location icon    | `https://res.cloudinary.com/dnickckih/image/upload/v1779127086/icon-location_prrxlu.png`             |
+| Phone icon       | `https://res.cloudinary.com/dnickckih/image/upload/v1779127086/icon-phone_o2xkim.png`                |
+| Mail icon        | `https://res.cloudinary.com/dnickckih/image/upload/v1779127086/icon-mail_uunu86.png`                 |
+| Globe icon       | `https://res.cloudinary.com/dnickckih/image/upload/v1779127086/icon-globe_nbxnhu.png`                |
+| CTA arrow        | `https://res.cloudinary.com/dnickckih/image/upload/v1779127086/icon-arrow_dntbzu.png`                |
 
-If you'd rather host the icons on the Cloudinary CDN too (recommended for
-consistency), upload the contents of `email-signature/assets/` (everything
-except the logo, which is already there) into the same Cloudinary folder and
-find-replace this prefix in `signature.html`:
-
-```
-https://raw.githubusercontent.com/mispaceq-commits/shlomi-mor-brand-guidelines/main/email-signature/assets/
-```
-
-with the Cloudinary URL prefix for those uploads, e.g.:
-
-```
-https://res.cloudinary.com/dnickckih/image/upload/v.../
-```
+If you ever need to replace any of these (different brand, different domain),
+upload the new PNG to your CDN and find-replace the existing URL in
+`signature.html`. The local copies in `assets/` are kept only as masters
+for regenerating from `build_assets.py`.
 
 ## Notes on client support
 
