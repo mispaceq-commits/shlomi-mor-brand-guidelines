@@ -10,9 +10,11 @@ reliably in Gmail, Outlook, Apple Mail and mobile clients.
 
 ```
 email-signature/
-  signature.html     # the markup to paste into Gmail (uses absolute image URLs)
-  preview.html       # browser preview using relative image paths
-  preview.png        # rendered screenshot of the signature
+  signature.html         # Michael P / Head of Marketing  — paste into Gmail
+  signature-owner.html   # Shlomi Mor / CEO              — paste into Gmail
+  preview.html           # browser preview of signature.html (relative paths)
+  preview-owner.html     # browser preview of signature-owner.html (relative paths)
+  preview.png            # rendered screenshot of the signature
   assets/
     shlomi-mor-logo.png      # logo, retina-ready
     icon-location.png        # 14×14 line icons (rendered at 2× = 28×28)
@@ -46,18 +48,34 @@ email-signature/
 > compose window if you want to pick the signature per email instead of always
 > appending it.
 
-## Editing the personal fields
+## Per-person fields
 
-The four lines you'll usually want to change live near the top of
-`signature.html`:
+Two variants ship in this folder. They share the same template, logo,
+rules, address, website and CTA — only the personal fields differ.
 
-| Field          | Default value                                                       |
+**`signature.html`** — Marketing
+
+| Field          | Value                                                               |
 | -------------- | ------------------------------------------------------------------- |
 | Name           | `MICHAEL P`                                                         |
 | Role           | `HEAD OF MARKETING`                                                 |
-| Address        | `49 West 24th Street, New York, NY 10010`                           |
 | Phone          | `917.440.2178` (link: `tel:+19174402178`)                           |
 | Email          | `marketing@shlomimorwigs.com`                                       |
+
+**`signature-owner.html`** — Owner / CEO
+
+| Field          | Value                                                               |
+| -------------- | ------------------------------------------------------------------- |
+| Name           | `SHLOMI MOR`                                                        |
+| Role           | `CEO`                                                               |
+| Phone          | `212.203.1009` (link: `tel:+12122031009`)                           |
+| Email          | `Shlomi@shlomimorwigs.com`                                          |
+
+Shared across both files:
+
+| Field          | Value                                                               |
+| -------------- | ------------------------------------------------------------------- |
+| Address        | `49 West 24th Street, New York, NY 10010`                           |
 | Website        | `https://www.shlomimorwigs.com`                                     |
 | CTA link       | `https://shlomimorwigs.com/booking-consultation/?type=saloonwig`    |
 
