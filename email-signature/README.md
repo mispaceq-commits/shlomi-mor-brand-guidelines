@@ -51,15 +51,15 @@ email-signature/
 The four lines you'll usually want to change live near the top of
 `signature.html`:
 
-| Field          | Default value                            |
-| -------------- | ---------------------------------------- |
-| Name           | `MICHAEL P`                              |
-| Role           | `HEAD OF MARKETING`                      |
-| Address        | `49 West 24th Street, New York, NY 10010`|
-| Phone          | `917.440.2178` (link: `tel:+19174402178`)|
-| Email          | `marketing@shlomimorwigs.com`            |
-| Website        | `https://www.shlomimorwigs.com`          |
-| CTA link       | `https://www.shlomimorwigs.com/book`     |
+| Field          | Default value                                                       |
+| -------------- | ------------------------------------------------------------------- |
+| Name           | `MICHAEL P`                                                         |
+| Role           | `HEAD OF MARKETING`                                                 |
+| Address        | `49 West 24th Street, New York, NY 10010`                           |
+| Phone          | `917.440.2178` (link: `tel:+19174402178`)                           |
+| Email          | `marketing@shlomimorwigs.com`                                       |
+| Website        | `https://www.shlomimorwigs.com`                                     |
+| CTA link       | `https://shlomimorwigs.com/booking-consultation/?type=saloonwig`    |
 
 Edit those strings in `signature.html` (or directly in the Gmail editor after
 pasting) before saving.
@@ -67,23 +67,28 @@ pasting) before saving.
 ## Hosting the images
 
 Gmail only renders images from publicly-reachable HTTPS URLs. The shipped
-`signature.html` references the assets from this repository via
-`raw.githubusercontent.com`, which works out of the box once the repo is on the
-default branch.
+`signature.html` uses two image hosts:
 
-If you'd rather host the images on the brand domain (recommended once
-`shlomimorwigs.com` is live), upload the contents of `email-signature/assets/`
-to e.g. `https://www.shlomimorwigs.com/assets/email/` and find-replace this
-prefix in `signature.html`:
+- **Logo** is served from Cloudinary at
+  `https://res.cloudinary.com/dnickckih/image/upload/v1779125002/shlomi-mor-logo_abmf6k.png`.
+  This is the brand's existing CDN and the URL works immediately.
+- **Line icons + CTA arrow** are served from `raw.githubusercontent.com` on the
+  `main` branch of this repo. They start returning 200 the moment this PR is
+  merged to `main`.
+
+If you'd rather host the icons on the Cloudinary CDN too (recommended for
+consistency), upload the contents of `email-signature/assets/` (everything
+except the logo, which is already there) into the same Cloudinary folder and
+find-replace this prefix in `signature.html`:
 
 ```
 https://raw.githubusercontent.com/mispaceq-commits/shlomi-mor-brand-guidelines/main/email-signature/assets/
 ```
 
-with:
+with the Cloudinary URL prefix for those uploads, e.g.:
 
 ```
-https://www.shlomimorwigs.com/assets/email/
+https://res.cloudinary.com/dnickckih/image/upload/v.../
 ```
 
 ## Notes on client support
