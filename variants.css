@@ -1,0 +1,356 @@
+/* =========================================================
+   Shlomi Mor Wigs — Premium Variants (Cover & Contents)
+   Direction: Chanel · Louis Vuitton — monochrome, high-contrast
+   modern serif, generous whitespace, hairline rules, ornaments.
+   ========================================================= */
+
+/* -------- Variant fonts ------------------------------------
+   Bodoni Moda  — Vogue/Harper's-style high-contrast display serif.
+   Cormorant    — soft editorial serif for italic accents.
+   These do NOT replace the approved book typefaces; they are used
+   only on the premium-variant pages as an alternative direction.
+   --------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400;1,6..96,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+
+/* -------- Variant tokens -------- */
+.variants-body {
+  background: #E8E2DA;
+}
+
+.page--maison {
+  --c-maison-paper:   #F7F1E8;   /* warm ivory */
+  --c-maison-ink:     #0B0B0B;
+  --c-maison-mute:    #6F665C;
+  --c-maison-rule:    #2C2620;
+  --c-maison-hair:    rgba(11, 11, 11, 0.55);
+
+  --f-maison-display: 'Bodoni Moda', 'idot', 'Didot', 'Times New Roman', serif;
+  --f-maison-italic:  'Cormorant Garamond', 'idot', 'Didot', serif;
+  --f-maison-caps:    'FuturaLT', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+
+  background: var(--c-maison-paper);
+  color: var(--c-maison-ink);
+}
+
+/* The variant pages don't use the 12-col grid — they have their own
+   centered layouts. Override .page__inner only inside .page--maison. */
+.page--maison .page__inner {
+  display: block;
+  padding: 0;
+}
+
+/* =========================================================
+   COVER VARIANT — Maison
+   ========================================================= */
+.maison {
+  position: absolute;
+  inset: 0;
+  padding: 64px 96px 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.maison__corner {
+  position: absolute;
+  top: 36px;
+  font-family: var(--f-maison-caps);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-maison-ink);
+}
+.maison__corner--tl { left: 56px; }
+.maison__corner--tr { right: 56px; }
+
+.maison__stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 880px;
+  margin-top: 36px;
+}
+
+.maison__mark {
+  width: 74px;
+  height: auto;
+  margin-bottom: 28px;
+  opacity: 0.96;
+}
+
+.maison__rule {
+  width: 240px;
+  position: relative;
+  height: 1px;
+  background: var(--c-maison-rule);
+}
+.maison__rule--ornament {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 14px;
+  margin: 18px 0;
+}
+.maison__rule--ornament::before,
+.maison__rule--ornament::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--c-maison-rule);
+}
+.maison__rule--ornament .diamond {
+  width: 6px;
+  height: 6px;
+  margin: 0 14px;
+  background: var(--c-maison-rule);
+  transform: rotate(45deg);
+}
+
+.maison__wordmark {
+  font-family: var(--f-maison-display);
+  font-weight: 400;
+  font-size: 92px;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin: 6px 0 12px;
+  /* Pull last letter's tracking back so the word looks optically centered */
+  padding-left: 0.22em;
+}
+
+.maison__sub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 320px;
+  margin: 4px 0 4px;
+}
+.maison__sub-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--c-maison-rule);
+}
+.maison__sub-word {
+  font-family: var(--f-maison-caps);
+  font-size: 12px;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  padding-left: 0.6em;
+}
+
+.maison__tagline {
+  font-family: var(--f-maison-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1;
+  margin: 14px 0 6px;
+  color: var(--c-maison-ink);
+  letter-spacing: 0.01em;
+}
+.maison__tagline em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.maison__volume {
+  font-family: var(--f-maison-caps);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--c-maison-mute);
+  margin: 0;
+}
+
+.maison__foot {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: end;
+  font-family: var(--f-maison-caps);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--c-maison-ink);
+  padding-top: 22px;
+  border-top: 1px solid var(--c-maison-rule);
+}
+.maison__foot span:nth-child(1) { text-align: left; }
+.maison__foot span:nth-child(2) { text-align: center; }
+.maison__foot span:nth-child(3) { text-align: right; }
+
+
+/* =========================================================
+   CONTENTS VARIANT — Sommaire
+   ========================================================= */
+.maison--toc {
+  text-align: left;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 56px 96px 48px;
+}
+
+.sommaire__head {
+  text-align: center;
+  width: 100%;
+  margin: 24px 0 18px;
+}
+
+.sommaire__title {
+  font-family: var(--f-maison-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  margin: 0;
+  color: var(--c-maison-ink);
+}
+
+.sommaire__rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 14px;
+  margin: 18px auto 14px;
+  width: 320px;
+}
+.sommaire__rule::before,
+.sommaire__rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--c-maison-rule);
+}
+.sommaire__rule .diamond {
+  width: 6px; height: 6px;
+  margin: 0 14px;
+  background: var(--c-maison-rule);
+  transform: rotate(45deg);
+}
+
+.sommaire__lede {
+  font-family: var(--f-maison-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 auto;
+  max-width: 64ch;
+  color: var(--c-maison-mute);
+}
+.sommaire__lede em {
+  font-style: italic;
+  color: var(--c-maison-ink);
+}
+
+.sommaire__grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  row-gap: 28px;
+}
+
+.sommaire__chapter {
+  display: block;
+}
+
+.sommaire__chapter-title {
+  font-family: var(--f-maison-caps);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-maison-ink);
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--c-maison-rule);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.sommaire__chapter-title .roman {
+  font-family: var(--f-maison-italic);
+  font-style: italic;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--c-maison-ink);
+}
+.sommaire__chapter-title .sep {
+  color: var(--c-maison-mute);
+  font-weight: 400;
+}
+.sommaire__chapter-title .name {
+  font-family: var(--f-maison-caps);
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+
+.sommaire__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sommaire__list li {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 0;
+  font-family: var(--f-maison-italic);
+  font-size: 17px;
+  line-height: 1.2;
+  color: var(--c-maison-ink);
+}
+.sommaire__list li + li {
+  border-top: 1px solid rgba(11, 11, 11, 0.10);
+}
+.sommaire__list .ttl {
+  font-family: var(--f-maison-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.005em;
+}
+.sommaire__list .dots {
+  display: block;
+  height: 1em;
+  background-image: radial-gradient(circle, var(--c-maison-hair) 0.8px, transparent 1.2px);
+  background-size: 8px 8px;
+  background-position: 0 0.65em;
+  background-repeat: repeat-x;
+  margin: 0 6px;
+}
+.sommaire__list .pg {
+  font-family: var(--f-maison-caps);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--c-maison-ink);
+  font-feature-settings: "tnum";
+}
+
+.sommaire__foot {
+  margin-top: auto;
+  padding-top: 22px;
+  border-top: 1px solid var(--c-maison-rule);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  font-family: var(--f-maison-caps);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--c-maison-ink);
+}
+.sommaire__foot span:nth-child(2) { text-align: center; }
+.sommaire__foot span:nth-child(3) { text-align: right; }
