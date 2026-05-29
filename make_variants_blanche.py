@@ -8,6 +8,40 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 PDF_OUT = os.path.join(ROOT, "exports", "Shlomi-Mor-Wigs-Premium-Blanche.pdf")
 PNG_DIR = sys.argv[1] if len(sys.argv) > 1 else "/tmp"
 
+PRINT_CSS = """
+@page {
+  size: 15in 9.375in;
+  margin: 0;
+}
+html, body {
+  background: #ffffff !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.book {
+  display: block !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+}
+.page {
+  width: 1440px !important;
+  height: 900px !important;
+  aspect-ratio: auto !important;
+  page-break-after: always !important;
+  break-after: page !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+.page:last-of-type {
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+.pageinfo { display: none !important; }
+"""
+
 async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch()
@@ -17,14 +51,16 @@ async def main():
         )
         page = await ctx.new_page()
         await page.goto("http://localhost:8765/variants-blanche.html", wait_until="networkidle")
+        await page.add_style_tag(content=PRINT_CSS)
         await page.evaluate("document.fonts.ready")
         await page.emulate_media(media="print")
         await page.pdf(
             path=PDF_OUT,
             width="15in",
             height="9.375in",
-            margin={"top": "0", "right": "0", "bottom": "0", "left": "0"},
             print_background=True,
+            prefer_css_page_size=True,
+            margin={"top": "0", "right": "0", "bottom": "0", "left": "0"},
         )
         names = [
             "blanche-01-cover",
