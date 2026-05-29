@@ -15,7 +15,13 @@ async def main(out_dir: str) -> None:
         await page.goto("http://localhost:8765/variants.html", wait_until="networkidle")
         await page.evaluate("document.fonts.ready")
         count = await page.locator(".page").count()
-        names = ["premium-cover", "premium-contents"]
+        names = [
+            "premium-01-cover",
+            "premium-02-contents",
+            "premium-03-mission",
+            "premium-04-colors",
+            "premium-05-typography",
+        ]
         for i in range(count):
             el = page.locator(".page").nth(i)
             await el.screenshot(path=f"{out_dir}/{names[i] if i < len(names) else f'page-{i:02d}'}.png", omit_background=False)
