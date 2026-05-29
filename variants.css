@@ -358,69 +358,67 @@
   color: var(--c-noir-soft);
 }
 
-.palette__grid {
+/* Three-swatch premium palette (Black / Gold / White) */
+.palette__trio {
   margin: 22px 0 0;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
   align-items: stretch;
 }
-.palette__cell {
+.palette__big {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
 }
-.palette__chip {
+.palette__big-chip {
   width: 100%;
-  aspect-ratio: 1 / 1.05;
+  aspect-ratio: 4 / 3;
   border: 1px solid var(--c-noir-hair-strong);
 }
-.palette__chip--ink {
-  background: #0E0E0E;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--c-noir-gold);
-  font-family: var(--f-noir-heavy);
-  font-size: 64px;
-  line-height: 1;
-}
-.palette__meta {
+.palette__big-chip--ink   { background: #0E0E0E; }
+.palette__big-chip--gold  { background: #A78D52; }
+.palette__big-chip--paper { background: #FFFFFF; }
+
+.palette__big-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding-top: 4px;
-  border-top: 1px solid var(--c-noir-hair);
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--c-noir-hair-strong);
 }
-.palette__num {
+.palette__big-num {
   font-family: var(--f-noir-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.42em;
   color: var(--c-noir-gold);
-  margin-top: 6px;
 }
-.palette__meta h4 {
+.palette__big-meta h4 {
   margin: 4px 0 4px;
   font-family: var(--f-noir-heavy);
   font-weight: 900;
-  font-size: 14px;
-  line-height: 1.15;
+  font-size: 22px;
+  line-height: 1.1;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   color: var(--c-noir-ink);
 }
-.palette__hex {
+.palette__big-hex {
   font-family: var(--f-noir-mono);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--c-noir-ink);
 }
-.palette__codes {
-  font-family: var(--f-noir-mono);
-  font-size: 10px;
-  letter-spacing: 0.02em;
-  color: var(--c-noir-mute);
-  margin-top: 2px;
+.palette__big-use {
+  margin: 10px 0 0;
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--c-noir-soft);
 }
 
 
