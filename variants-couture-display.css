@@ -788,17 +788,10 @@
   gap: 14px;
   box-shadow: 0 14px 32px rgba(14, 14, 14, 0.10);
 }
-.couture-d-apps__bag-mono {
-  width: 96px;
+.couture-d-apps__bag-logo {
+  width: 180px;
   height: auto;
-}
-.couture-d-apps__bag-mark {
-  font-family: var(--f-cd-sans);
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: 0.42em;
-  color: var(--c-cd-ink);
-  padding-left: 0.42em;
+  display: block;
 }
 .couture-d-apps__bag-tag {
   font-family: var(--f-cd-sans);
@@ -859,17 +852,10 @@
   border-radius: 50%;
   background: var(--c-cd-paper);
 }
-.couture-d-apps__tag-mono {
-  width: 58px;
+.couture-d-apps__tag-logo {
+  width: 130px;
   height: auto;
-}
-.couture-d-apps__tag-mark {
-  font-family: var(--f-cd-sans);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.36em;
-  color: var(--c-cd-ink);
-  padding-left: 0.36em;
+  display: block;
 }
 .couture-d-apps__tag-rule {
   display: block;
@@ -933,14 +919,10 @@
   justify-content: center;
   gap: 10px;
 }
-.couture-d-apps__card-mono { width: 38px; height: auto; }
-.couture-d-apps__card-mark {
-  font-family: var(--f-cd-sans);
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.42em;
-  color: var(--c-cd-ink);
-  padding-left: 0.42em;
+.couture-d-apps__card-logo {
+  width: 150px;
+  height: auto;
+  display: block;
 }
 .couture-d-apps__card-tag {
   font-family: var(--f-cd-sans);
