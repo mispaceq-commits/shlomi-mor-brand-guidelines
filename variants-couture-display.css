@@ -1,0 +1,978 @@
+/* =========================================================
+   COUTURE EDITION — DISPLAY ALTERNATE
+   ---------------------------------------------------------
+   Same content, palette and typeface as variants-couture.
+   This is an alternate composition that leans harder into
+   editorial display typography and graphic ornament:
+   - giant Roman-numeral watermarks per page
+   - hairline gold corner brackets (passe-partout)
+   - "chapter cartouche" label + page-number unit
+   - recurring gold-dot and × motifs as separators
+   - A-Z ribbon, paired letterforms, vertical color bars,
+     QUIET/EXACT/KIND poster, editorial flatlay with grid.
+   ========================================================= */
+
+:root {
+  --f-cd-sans:   "Inter", "Helvetica Neue", Arial, sans-serif;
+  --f-cd-serif:  "EB Garamond", "Cormorant Garamond", "Times New Roman", serif;
+
+  --c-cd-ink:    #0E0E0E;
+  --c-cd-paper:  #FFFFFF;
+  --c-cd-gold:   #A78D52;
+  --c-cd-soft:   #4A4A48;
+  --c-cd-mute:   #8C8A86;
+  --c-cd-hair:   rgba(14, 14, 14, 0.16);
+  --c-cd-mark:   rgba(14, 14, 14, 0.07);
+}
+
+.variants-body--couture-d {
+  background: #2A2A28;
+  margin: 0;
+  padding: 0;
+}
+
+.variants-body--couture-d .book {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px 0;
+  align-items: center;
+}
+
+.page.page--couture-d {
+  position: relative;
+  width: 1440px;
+  height: 900px;
+  background: var(--c-cd-paper);
+  color: var(--c-cd-ink);
+  font-family: var(--f-cd-sans);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================================
+   SHARED ORNAMENTS
+   ========================================================= */
+
+/* Corner brackets — small "L" marks at four corners */
+.couture-d__bracket {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  z-index: 2;
+  pointer-events: none;
+}
+.couture-d__bracket--tl { top: 40px; left: 40px; border-top: 1px solid var(--c-cd-gold); border-left: 1px solid var(--c-cd-gold); }
+.couture-d__bracket--tr { top: 40px; right: 40px; border-top: 1px solid var(--c-cd-gold); border-right: 1px solid var(--c-cd-gold); }
+.couture-d__bracket--bl { bottom: 40px; left: 40px; border-bottom: 1px solid var(--c-cd-gold); border-left: 1px solid var(--c-cd-gold); }
+.couture-d__bracket--br { bottom: 40px; right: 40px; border-bottom: 1px solid var(--c-cd-gold); border-right: 1px solid var(--c-cd-gold); }
+/* Over white backgrounds with darker bars (palette) — switch to ink */
+.couture-d__bracket--over { z-index: 5; }
+.couture-d__bracket--over.couture-d__bracket--tl,
+.couture-d__bracket--over.couture-d__bracket--tr,
+.couture-d__bracket--over.couture-d__bracket--bl,
+.couture-d__bracket--over.couture-d__bracket--br {
+  border-color: var(--c-cd-paper);
+  mix-blend-mode: normal;
+}
+
+/* Massive Arabic chapter-number background watermark.
+   Sits flush in a corner so it reads as an intentional folio,
+   not a stray stripe across the page. */
+.couture-d__roman {
+  position: absolute;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  color: var(--c-cd-mark);
+  pointer-events: none;
+  line-height: 0.78;
+  letter-spacing: -0.07em;
+  user-select: none;
+  z-index: 0;
+  font-size: 720px;
+}
+.couture-d__roman--cover { bottom: -200px; right: -60px; font-size: 760px; }
+.couture-d__roman--house { bottom: -220px; right: -80px; font-size: 820px; }
+.couture-d__roman--type  { bottom: -240px; left: -60px;  font-size: 820px; }
+.couture-d__roman--voice { bottom: -220px; right: -80px; font-size: 820px; }
+.couture-d__roman--apps  { bottom: -240px; right: -80px; font-size: 820px; }
+
+/* Chapter cartouche — number + label in a single hairline frame */
+.couture-d__cart {
+  position: absolute;
+  top: 78px;
+  left: 84px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--c-cd-ink);
+  font-family: var(--f-cd-sans);
+  font-weight: 600;
+  color: var(--c-cd-ink);
+  z-index: 4;
+}
+.couture-d__cart-n {
+  padding: 8px 12px;
+  background: var(--c-cd-ink);
+  color: var(--c-cd-paper);
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  border-right: 1px solid var(--c-cd-ink);
+}
+.couture-d__cart-l {
+  padding: 8px 16px 8px 14px;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+/* Inverted cartouche over dark bars — invert colors so the
+   black number block reads against the dark left palette bar. */
+.couture-d__cart--over { z-index: 6; border-color: var(--c-cd-paper); }
+.couture-d__cart--over .couture-d__cart-n {
+  background: var(--c-cd-paper);
+  color: var(--c-cd-ink);
+  border-right-color: var(--c-cd-paper);
+}
+.couture-d__cart--over .couture-d__cart-l { color: var(--c-cd-paper); }
+
+/* Topline / baseline / footline */
+.couture-d__topline,
+.couture-d__baseline,
+.couture-d__footline {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-cd-ink);
+  z-index: 3;
+}
+.couture-d__topline  { top: 56px; }
+.couture-d__baseline { bottom: 56px; }
+.couture-d__footline { bottom: 56px; color: var(--c-cd-mute); font-weight: 400; }
+
+/* Page number — top-right, large, hairline */
+.couture-d__num {
+  position: absolute;
+  top: 64px;
+  right: 84px;
+  font-family: var(--f-cd-sans);
+  font-weight: 200;
+  font-size: 96px;
+  line-height: 0.9;
+  color: var(--c-cd-ink);
+  letter-spacing: -0.02em;
+  z-index: 3;
+}
+
+/* Dots and crosses */
+.couture-d__dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c-cd-ink);
+  vertical-align: middle;
+}
+.couture-d__dot--gold { background: var(--c-cd-gold); }
+.couture-d__cross {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--c-cd-gold);
+  margin-right: 12px;
+}
+
+/* Diagonal hairline graphic for House */
+.couture-d__diag {
+  position: absolute;
+  top: 132px;
+  left: 84px;
+  width: 220px;
+  height: 1px;
+  background: var(--c-cd-gold);
+  transform-origin: 0 0;
+  transform: rotate(-12deg);
+  z-index: 3;
+}
+
+
+/* =========================================================
+   I — COVER
+   ========================================================= */
+.page--couture-d-cover {}
+
+.couture-d-cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+.couture-d-cover__wordmark {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+  color: var(--c-cd-ink);
+  text-align: center;
+}
+.couture-d-cover__line {
+  font-size: 280px;
+  display: block;
+  padding-left: 0.02em;
+  padding-right: 0.02em;
+}
+.couture-d-cover__line--outline {
+  -webkit-text-stroke: 4px var(--c-cd-ink);
+  color: transparent;
+  text-stroke: 4px var(--c-cd-ink);
+}
+
+.couture-d-cover__mark {
+  position: absolute;
+  top: 110px;
+  right: 110px;
+  width: 72px;
+  z-index: 4;
+}
+.couture-d-cover__mark img { width: 100%; height: auto; display: block; }
+
+.couture-d-cover__tagline {
+  position: absolute;
+  bottom: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--f-cd-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: 0.005em;
+  color: var(--c-cd-ink);
+  z-index: 3;
+}
+
+
+/* =========================================================
+   II — THE HOUSE
+   ========================================================= */
+.couture-d-house {
+  position: absolute;
+  inset: 0;
+  padding: 200px 84px 120px;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 80px;
+  z-index: 1;
+}
+
+.couture-d-house__h {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 168px;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--c-cd-ink);
+}
+.couture-d-house__l {
+  display: block;
+}
+/* Color the last line "York." in gold-ink emphasis for a small graphic moment */
+.couture-d-house__h .couture-d-house__l:last-of-type {
+  color: var(--c-cd-gold);
+}
+
+.couture-d-house__aside {
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 380px;
+}
+.couture-d-house__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-cd-gold);
+}
+.couture-d-house__aside p {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--c-cd-soft);
+}
+.couture-d-house__rule {
+  display: block;
+  width: 64px;
+  height: 1px;
+  background: var(--c-cd-ink);
+  margin-top: 6px;
+}
+.couture-d-house__sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--f-cd-sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--c-cd-ink);
+}
+
+
+/* =========================================================
+   III — PALETTE · Three full-bleed vertical bars
+   ========================================================= */
+.couture-d-palette {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.couture-d-palette__bar {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+.couture-d-palette__bar--ink   { background: var(--c-cd-ink); color: var(--c-cd-paper); }
+.couture-d-palette__bar--paper { background: var(--c-cd-paper); color: var(--c-cd-ink); border-left: 1px solid var(--c-cd-hair); border-right: 1px solid var(--c-cd-hair); }
+.couture-d-palette__bar--gold  { background: var(--c-cd-gold); color: var(--c-cd-paper); }
+
+.couture-d-palette__stack {
+  position: absolute;
+  bottom: 110px;
+  left: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 2;
+}
+.couture-d-palette__n {
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  opacity: 0.7;
+}
+.couture-d-palette__bar--paper .couture-d-palette__n { color: var(--c-cd-gold); opacity: 1; }
+.couture-d-palette__name {
+  font-family: var(--f-cd-sans);
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.couture-d-palette__hex {
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  opacity: 0.78;
+}
+
+/* Big watermark inside black bar — sits at the bottom so
+   it reads as an intentional folio rather than a crop. */
+.couture-d-palette__roman {
+  position: absolute;
+  bottom: -120px;
+  right: -40px;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 560px;
+  line-height: 0.78;
+  letter-spacing: -0.06em;
+  color: rgba(255, 255, 255, 0.055);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Page-title block lays over the white center bar */
+.couture-d-palette__title {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 96px;
+  letter-spacing: -0.02em;
+  color: var(--c-cd-ink);
+  z-index: 4;
+  display: none; /* replaced by cartouche */
+}
+.couture-d-palette__pagenum {
+  position: absolute;
+  bottom: 80px;
+  right: 56px;
+  font-family: var(--f-cd-sans);
+  font-weight: 200;
+  font-size: 110px;
+  color: var(--c-cd-paper);
+  z-index: 4;
+  line-height: 0.85;
+  display: none;
+}
+
+/* Unifying gold hairline across the three bars */
+.couture-d-palette__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(167, 141, 82, 0.55);
+  z-index: 3;
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   IV — TYPE SYSTEM · Paired M letterform + alphabet ribbon
+   ========================================================= */
+.couture-d-type__alphabet {
+  position: absolute;
+  top: 188px;
+  left: 84px;
+  right: 84px;
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.62em;
+  color: var(--c-cd-mute);
+  text-align: center;
+  border-top: 1px solid var(--c-cd-hair);
+  border-bottom: 1px solid var(--c-cd-hair);
+  padding: 14px 0;
+  z-index: 3;
+}
+
+.couture-d-type {
+  position: absolute;
+  inset: 0;
+  padding: 280px 84px 120px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 64px;
+  align-items: center;
+  z-index: 1;
+}
+
+.couture-d-type__letter-pair {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+.couture-d-type__letter {
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 520px;
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  color: var(--c-cd-ink);
+}
+.couture-d-type__letter--outline {
+  position: absolute;
+  left: 18%;
+  top: -18px;
+  -webkit-text-stroke: 3px var(--c-cd-ink);
+  color: transparent;
+  font-size: 520px;
+  opacity: 0.55;
+}
+.couture-d-type__letter--solid {
+  position: relative;
+}
+
+.couture-d-type__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-self: end;
+  margin-bottom: 40px;
+}
+.couture-d-type__h {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 60px;
+  letter-spacing: -0.02em;
+  color: var(--c-cd-ink);
+  line-height: 1;
+}
+.couture-d-type__lede {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--c-cd-soft);
+  max-width: 420px;
+}
+.couture-d-type__stack {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--c-cd-hair);
+}
+.couture-d-type__stack li {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--c-cd-hair);
+  font-family: var(--f-cd-sans);
+  color: var(--c-cd-ink);
+}
+.couture-d-type__bullet {
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-gold);
+}
+.couture-d-type__stack strong {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.32em;
+}
+.couture-d-type__stack em {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--c-cd-mute);
+  justify-self: end;
+}
+
+
+/* =========================================================
+   V — VOICE · QUIET/EXACT/KIND poster
+   ========================================================= */
+.couture-d-voice {
+  position: absolute;
+  inset: 0;
+  padding: 180px 84px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  z-index: 1;
+}
+.couture-d-voice__h {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.couture-d-voice__l {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 36px;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 156px;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  color: var(--c-cd-ink);
+}
+.couture-d-voice__l-w {
+  display: inline-block;
+}
+.couture-d-voice__l-rule {
+  height: 1px;
+  background: var(--c-cd-ink);
+  margin-top: 8px;
+}
+.couture-d-voice__dot {
+  color: var(--c-cd-gold);
+}
+
+.couture-d-voice__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 18px;
+}
+.couture-d-voice__col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.couture-d-voice__col-h {
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-ink);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--c-cd-ink);
+  padding-bottom: 10px;
+}
+.couture-d-voice__col--anti .couture-d-voice__col-h {
+  color: var(--c-cd-gold);
+  border-bottom-color: rgba(167, 141, 82, 0.6);
+}
+.couture-d-voice__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.couture-d-voice__col li {
+  display: flex;
+  align-items: center;
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--c-cd-ink);
+}
+.couture-d-voice__col--anti li {
+  color: var(--c-cd-mute);
+  text-decoration: line-through;
+  text-decoration-color: rgba(167, 141, 82, 0.7);
+  text-decoration-thickness: 1.5px;
+}
+.couture-d-voice__col li .couture-d__dot--gold {
+  margin-right: 12px;
+}
+
+
+/* =========================================================
+   VI — IN USE · Editorial flatlay
+   ========================================================= */
+.couture-d-apps {
+  position: absolute;
+  inset: 0;
+  padding: 130px 84px 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1;
+}
+.couture-d-apps__h {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--c-cd-ink);
+}
+.couture-d-apps__dot { color: var(--c-cd-gold); }
+.couture-d-apps__lede {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--c-cd-soft);
+  max-width: 540px;
+}
+
+/* Stage — overlapping editorial flatlay */
+.couture-d-apps__stage {
+  position: relative;
+  flex: 1;
+  margin-top: 14px;
+}
+
+/* 3x3 hairline grid behind the items */
+.couture-d-apps__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(14,14,14,0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14,14,14,0.05) 1px, transparent 1px);
+  background-size: calc(100% / 3) 100%, 100% calc(100% / 3);
+  z-index: 0;
+}
+
+/* Caption shared style for flatlay */
+.couture-d-apps__stage figcaption {
+  position: absolute;
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-ink);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.couture-d-apps__stage figcaption span { color: var(--c-cd-gold); margin-right: 6px; }
+.couture-d-apps__stage figcaption i {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--c-cd-mute);
+  margin-left: 8px;
+}
+
+/* Shopping bag — HERO, centered, largest */
+.couture-d-apps__hero {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 2;
+}
+.couture-d-apps__bag {
+  position: relative;
+  width: 340px;
+  height: 400px;
+}
+.couture-d-apps__bag-handle {
+  position: absolute;
+  top: 0;
+  width: 72px;
+  height: 44px;
+  border: 1.5px solid var(--c-cd-ink);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+}
+.couture-d-apps__bag-handle--l { left: 64px; }
+.couture-d-apps__bag-handle--r { right: 64px; }
+.couture-d-apps__bag-body {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--c-cd-paper);
+  border: 1.5px solid var(--c-cd-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  box-shadow: 0 14px 32px rgba(14, 14, 14, 0.10);
+}
+.couture-d-apps__bag-mono {
+  width: 96px;
+  height: auto;
+}
+.couture-d-apps__bag-mark {
+  font-family: var(--f-cd-sans);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-ink);
+  padding-left: 0.42em;
+}
+.couture-d-apps__bag-tag {
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-mute);
+  padding-left: 0.42em;
+}
+.couture-d-apps__hero figcaption {
+  position: static;
+  display: block;
+  text-align: center;
+  margin-top: 18px;
+}
+
+/* Hangtag — on the LEFT, suspended from a string */
+.couture-d-apps__tag-wrap {
+  position: absolute;
+  left: 60px;
+  top: -10px;
+  margin: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.couture-d-apps__tag-string {
+  width: 1px;
+  height: 60px;
+  background: var(--c-cd-ink);
+  margin-bottom: -1px;
+}
+.couture-d-apps__tag {
+  position: relative;
+  width: 200px;
+  height: 304px;
+  background: var(--c-cd-paper);
+  border: 1px solid var(--c-cd-hair);
+  border-radius: 6px 6px 3px 3px;
+  padding: 64px 22px 22px;
+  box-shadow: 0 12px 28px rgba(14, 14, 14, 0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transform: rotate(-3deg);
+  transform-origin: top center;
+}
+.couture-d-apps__tag-eye {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--c-cd-ink);
+  border-radius: 50%;
+  background: var(--c-cd-paper);
+}
+.couture-d-apps__tag-mono {
+  width: 58px;
+  height: auto;
+}
+.couture-d-apps__tag-mark {
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.36em;
+  color: var(--c-cd-ink);
+  padding-left: 0.36em;
+}
+.couture-d-apps__tag-rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--c-cd-hair);
+  margin: 4px 0;
+}
+.couture-d-apps__tag-line {
+  font-family: var(--f-cd-sans);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-cd-ink);
+}
+.couture-d-apps__tag-line--gold { color: var(--c-cd-gold); margin-top: 2px; }
+.couture-d-apps__tag-wrap figcaption {
+  position: static;
+  margin-top: 14px;
+  text-align: center;
+}
+
+/* Business card — stacked on RIGHT, rotated slightly */
+.couture-d-apps__card-wrap {
+  position: absolute;
+  right: 40px;
+  bottom: 24px;
+  margin: 0;
+  z-index: 4;
+}
+.couture-d-apps__card-stack {
+  position: relative;
+  width: 340px;
+  height: 220px;
+}
+.couture-d-apps__card {
+  position: absolute;
+  width: 320px;
+  height: 184px;
+  background: var(--c-cd-paper);
+  border: 1px solid var(--c-cd-hair);
+  border-radius: 3px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 14px 28px rgba(14, 14, 14, 0.12);
+}
+.couture-d-apps__card--back {
+  top: 0;
+  left: 0;
+  transform: rotate(-7deg);
+  gap: 4px;
+  justify-content: center;
+}
+.couture-d-apps__card--front {
+  bottom: 0;
+  right: 0;
+  transform: rotate(5deg);
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.couture-d-apps__card-mono { width: 38px; height: auto; }
+.couture-d-apps__card-mark {
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-ink);
+  padding-left: 0.42em;
+}
+.couture-d-apps__card-tag {
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-mute);
+  padding-left: 0.42em;
+}
+.couture-d-apps__card-name {
+  font-family: var(--f-cd-sans);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.32em;
+  color: var(--c-cd-ink);
+}
+.couture-d-apps__card-role {
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--c-cd-gold);
+}
+.couture-d-apps__card-line {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--c-cd-hair);
+  margin: 8px 0 6px;
+}
+.couture-d-apps__card-meta {
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--c-cd-soft);
+}
+.couture-d-apps__card-wrap figcaption {
+  position: static;
+  display: block;
+  margin-top: 14px;
+  text-align: center;
+}
