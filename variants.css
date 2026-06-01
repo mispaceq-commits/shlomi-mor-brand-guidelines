@@ -1,0 +1,614 @@
+/* =========================================================
+   Shlomi Mor Wigs — Premium Variant · Maison Noir
+   5-page sampler. Direction:
+     · Pure black (#000) background
+     · Heavy display SANS (Archivo Black + Inter 900) for the
+       brand-shouting headlines & numerals
+     · Refined italic SERIF (Cormorant Garamond 300 italic) only
+       as soft accent — a fashion-house contrast
+     · Aged gold (#B8945A) hairline rules
+     · Generous whitespace, asymmetric editorial grids,
+       no decorative gimmicks
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+/* -------- Variant tokens -------- */
+.variants-body { background: #1A1716; }
+
+.page--noir {
+  --c-noir-bg:    #0E0E0E;       /* brand Signature Black */
+  --c-noir-ink:   #FBF8F4;       /* brand Paper Cream */
+  --c-noir-soft:  #C9AC7F;       /* brand Champagne */
+  --c-noir-mute:  #6E6663;       /* brand Stone Gray */
+  --c-noir-gold:  #A78D52;       /* brand Antique Gold */
+  --c-noir-hair:  rgba(251, 248, 244, 0.14);
+  --c-noir-hair-strong: rgba(251, 248, 244, 0.30);
+
+  --f-noir-heavy: 'Archivo Black', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --f-noir-sans:  'Inter', 'FuturaLT', 'Helvetica Neue', Arial, sans-serif;
+  --f-noir-italic:'Cormorant Garamond', 'idot', 'Didot', serif;
+  --f-noir-mono:  'JetBrains Mono', 'IBM Plex Mono', 'Menlo', monospace;
+  --f-noir-script:'SnellRoundhand', 'Snell Roundhand', cursive;
+
+  background: var(--c-noir-bg);
+  color: var(--c-noir-ink);
+}
+
+.page--noir .page__inner { display: block; padding: 0; }
+
+/* -------- Shared noir scaffolding -------- */
+.noir {
+  position: absolute;
+  inset: 0;
+  padding: 38px 80px 30px;
+  display: flex;
+  flex-direction: column;
+  color: var(--c-noir-ink);
+}
+
+.noir__rail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--f-noir-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-noir-ink);
+}
+.noir__rail--top    { padding-bottom: 14px; border-bottom: 1px solid var(--c-noir-hair); }
+.noir__rail--bottom { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--c-noir-hair);
+                      display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.noir__rail--bottom span:nth-child(2) { text-align: center; }
+.noir__rail--bottom span:nth-child(3) { text-align: right; }
+.noir__rail--bottom span:nth-child(2) { color: var(--c-noir-gold); }
+
+
+/* =========================================================
+   01 — COVER (Maison Noir)
+   ========================================================= */
+.noir-cover {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding: 0 40px;
+}
+
+.noir-cover__logo {
+  display: block;
+  width: 520px;
+  height: auto;
+  margin: 0 auto;
+}
+.noir-cover__logo svg,
+.noir-cover__logo img { width: 100%; height: auto; display: block; }
+
+.noir-cover__marker {
+  margin: 36px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+.noir-cover__marker span { display: block; width: 64px; height: 1px; background: var(--c-noir-gold); }
+.noir-cover__marker em {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  color: var(--c-noir-gold);
+}
+
+
+/* =========================================================
+   02 — CONTENTS (Chapter Stack)
+   ========================================================= */
+.stack__head {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 56px;
+  align-items: end;
+  margin: 14px 0 8px;
+}
+.stack__eyebrow {
+  display: block;
+  font-family: var(--f-noir-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+  margin-bottom: 10px;
+}
+.stack__title {
+  margin: 0;
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 104px;
+  line-height: 0.88;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--c-noir-ink);
+}
+.stack__lede {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 52ch;
+  color: var(--c-noir-soft);
+  padding-bottom: 8px;
+}
+
+.stack {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--c-noir-hair-strong);
+}
+.stack__row {
+  display: grid;
+  grid-template-columns: 140px 1fr 100px;
+  gap: 32px;
+  align-items: start;
+  padding: 14px 0 12px;
+  border-bottom: 1px solid var(--c-noir-hair);
+}
+.stack__num {
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 76px;
+  line-height: 0.85;
+  letter-spacing: -0.01em;
+  color: var(--c-noir-ink);
+}
+.stack__body { padding-top: 6px; }
+.stack__chapter {
+  font-family: var(--f-noir-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+  margin-bottom: 8px;
+}
+.stack__items {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 4px;
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--c-noir-ink);
+}
+.stack__items span { white-space: nowrap; }
+.stack__items span + span {
+  padding-left: 28px;
+  position: relative;
+}
+.stack__items span + span::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.55em;
+  width: 4px; height: 4px;
+  background: var(--c-noir-gold);
+  transform: rotate(45deg);
+}
+.stack__range {
+  text-align: right;
+  font-family: var(--f-noir-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+  padding-top: 12px;
+}
+
+
+/* =========================================================
+   03 — MISSION · VISION · VALUES
+   ========================================================= */
+.mvv-noir__head {
+  margin: 22px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mvv-noir__eyebrow {
+  font-family: var(--f-noir-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+}
+.mvv-noir__title {
+  margin: 0;
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 100px;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--c-noir-ink);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+.mvv-noir__title .italic {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 100px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--c-noir-ink);
+}
+.mvv-noir__title .italic em { font-style: italic; }
+
+.mvv-noir__grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px;
+  border-top: 1px solid var(--c-noir-hair-strong);
+  padding-top: 28px;
+}
+
+.mvv-noir__col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mvv-noir__col-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.mvv-noir__num {
+  font-family: var(--f-noir-heavy);
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--c-noir-ink);
+}
+.mvv-noir__kind {
+  font-family: var(--f-noir-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+}
+.mvv-noir__h {
+  margin: 0;
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  color: var(--c-noir-ink);
+}
+.mvv-noir__body {
+  margin: 4px 0 0;
+  font-family: var(--f-noir-sans);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--c-noir-soft);
+  max-width: 30ch;
+}
+.mvv-noir__body em { font-style: italic; color: var(--c-noir-ink); }
+
+
+/* =========================================================
+   04 — THE MAIN COLORS
+   ========================================================= */
+.palette__head {
+  margin: 24px 0 18px;
+}
+.palette__eyebrow {
+  display: block;
+  font-family: var(--f-noir-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+  margin-bottom: 10px;
+}
+.palette__title {
+  margin: 0;
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 96px;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--c-noir-ink);
+}
+.palette__title em {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--c-noir-ink);
+}
+.palette__lede {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 14px 0 0;
+  max-width: 64ch;
+  color: var(--c-noir-soft);
+}
+
+/* Three-swatch premium palette (Black / Gold / White) */
+.palette__trio {
+  margin: 22px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  align-items: stretch;
+}
+.palette__big {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.palette__big-chip {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--c-noir-hair-strong);
+}
+.palette__big-chip--ink   { background: #0E0E0E; }
+.palette__big-chip--gold  { background: #A78D52; }
+.palette__big-chip--paper { background: #FFFFFF; }
+
+.palette__big-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--c-noir-hair-strong);
+}
+.palette__big-num {
+  font-family: var(--f-noir-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  color: var(--c-noir-gold);
+}
+.palette__big-meta h4 {
+  margin: 4px 0 4px;
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  color: var(--c-noir-ink);
+}
+.palette__big-hex {
+  font-family: var(--f-noir-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--c-noir-ink);
+}
+.palette__big-use {
+  margin: 10px 0 0;
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--c-noir-soft);
+}
+
+
+/* =========================================================
+   05 — TYPOGRAPHY IN USE
+   ========================================================= */
+.type-noir__head {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin: 14px 0 10px;
+}
+.type-noir__eyebrow {
+  display: block;
+  font-family: var(--f-noir-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+  margin-bottom: 10px;
+}
+.type-noir__title {
+  margin: 0;
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 84px;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--c-noir-ink);
+}
+.type-noir__title em {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--c-noir-ink);
+}
+.type-noir__lede {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 44ch;
+  color: var(--c-noir-soft);
+  padding-bottom: 6px;
+}
+.type-noir__lede em { font-style: italic; color: var(--c-noir-ink); }
+
+.type-noir__grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  border-top: 1px solid var(--c-noir-hair-strong);
+  padding-top: 16px;
+}
+
+.type-noir__card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 4px;
+  border-right: 1px solid var(--c-noir-hair);
+}
+.type-noir__card:last-child { border-right: 0; }
+
+.type-noir__card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.type-noir__num {
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--c-noir-gold);
+}
+.type-noir__role {
+  font-family: var(--f-noir-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-noir-ink);
+}
+
+.type-noir__specimen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+  border: 1px solid var(--c-noir-hair);
+  background: rgba(243, 237, 224, 0.03);
+  color: var(--c-noir-ink);
+  line-height: 1;
+}
+.type-noir__specimen--serif {
+  font-family: var(--f-noir-italic);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 132px;
+  letter-spacing: -0.02em;
+}
+.type-noir__specimen--sans {
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 132px;
+  letter-spacing: -0.04em;
+}
+.type-noir__specimen--script {
+  font-family: var(--f-noir-script);
+  font-weight: 700;
+  font-size: 108px;
+  color: var(--c-noir-gold);
+  letter-spacing: 0;
+}
+
+.type-noir__meta h5 {
+  margin: 0;
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--c-noir-ink);
+}
+.type-noir__meta p {
+  margin: 4px 0 0;
+  font-family: var(--f-noir-sans);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--c-noir-soft);
+}
+.type-noir__meta p em { font-style: italic; color: var(--c-noir-ink); }
+.type-noir__meta .num {
+  font-family: var(--f-noir-mono);
+  font-size: 12px;
+  color: var(--c-noir-ink);
+  letter-spacing: 0.02em;
+}
+
+.type-noir__pair {
+  margin-top: 14px;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--c-noir-hair);
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+.type-noir__pair-label {
+  font-family: var(--f-noir-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--c-noir-gold);
+}
+.type-noir__pair p {
+  margin: 0;
+  font-family: var(--f-noir-sans);
+  font-size: 16px;
+  color: var(--c-noir-soft);
+  letter-spacing: 0.02em;
+}
+.type-noir__pair .serif {
+  font-family: var(--f-noir-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--c-noir-ink);
+}
+.type-noir__pair .sans {
+  font-family: var(--f-noir-heavy);
+  font-weight: 900;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--c-noir-ink);
+}
+.type-noir__pair .script {
+  font-family: var(--f-noir-script);
+  font-size: 28px;
+  color: var(--c-noir-gold);
+}
+.type-noir__pair .sep { color: var(--c-noir-mute); }

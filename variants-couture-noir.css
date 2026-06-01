@@ -1,0 +1,155 @@
+/* =========================================================
+   COUTURE EDITION — NOIR
+   Same Chanel × Dior structure as variants-couture.css.
+   This file only inverts the surface: black paper, white ink,
+   gold accent stays. Mockups stay on white "paper" so they
+   read as real-world product photography on a dark backdrop.
+   ========================================================= */
+
+.variants-body--couture-noir .page.page--couture {
+  background: #0E0E0E;
+  color: #FFFFFF;
+}
+
+/* Page chrome ------------------------------------------- */
+.variants-body--couture-noir .couture__pagelabel,
+.variants-body--couture-noir .couture__pagenum,
+.variants-body--couture-noir .couture__topline {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture__baseline,
+.variants-body--couture-noir .couture__footline {
+  color: rgba(255, 255, 255, 0.52);
+}
+
+/* Cover -------------------------------------------------- */
+.variants-body--couture-noir .couture-cover__wordmark,
+.variants-body--couture-noir .couture-cover__tagline {
+  color: #FFFFFF;
+}
+/* Logo: swap the black monogram for the white one */
+.variants-body--couture-noir .couture-cover__mono img,
+.variants-body--couture-noir .couture-apps__card-mono,
+.variants-body--couture-noir .couture-apps__tag-mono,
+.variants-body--couture-noir .couture-apps__bag-mono {
+  /* monogram svg is solid black; invert luminance to render white */
+}
+
+/* The House --------------------------------------------- */
+.variants-body--couture-noir .couture-house__h {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-house__col-h {
+  color: #A78D52;
+}
+.variants-body--couture-noir .couture-house__col p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Palette ----------------------------------------------- */
+.variants-body--couture-noir .couture-palette__h {
+  color: #FFFFFF;
+}
+/* The three bars: the Black bar needs a hairline so it shows on a black page */
+.variants-body--couture-noir .couture-palette__bar {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.variants-body--couture-noir .couture-palette__bar--ink {
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.variants-body--couture-noir .couture-palette__bar--ink .couture-palette__bar-tag,
+.variants-body--couture-noir .couture-palette__bar--gold .couture-palette__bar-tag {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-palette__bar--paper .couture-palette__bar-tag {
+  color: #0E0E0E;
+}
+.variants-body--couture-noir .couture-palette__notes p {
+  color: rgba(255, 255, 255, 0.72);
+}
+.variants-body--couture-noir .couture-palette__notes strong {
+  color: #FFFFFF;
+}
+
+/* Type System ------------------------------------------- */
+.variants-body--couture-noir .couture-type__h,
+.variants-body--couture-noir .couture-type__spec,
+.variants-body--couture-noir .couture-type__meta h4,
+.variants-body--couture-noir .couture-type__sample {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-type__role,
+.variants-body--couture-noir .couture-type__rule-k {
+  color: #A78D52;
+}
+.variants-body--couture-noir .couture-type__meta p,
+.variants-body--couture-noir .couture-type__rule {
+  color: rgba(255, 255, 255, 0.72);
+}
+.variants-body--couture-noir .couture-type__cell {
+  border-top-color: rgba(255, 255, 255, 0.62);
+}
+.variants-body--couture-noir .couture-type__sample {
+  border-top-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Voice & Tone ------------------------------------------ */
+.variants-body--couture-noir .couture-voice__h {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-voice__lede {
+  color: rgba(255, 255, 255, 0.78);
+}
+.variants-body--couture-noir .couture-voice__col-h {
+  color: #FFFFFF;
+  border-bottom-color: rgba(255, 255, 255, 0.62);
+}
+.variants-body--couture-noir .couture-voice__col--anti .couture-voice__col-h {
+  color: #A78D52;
+  border-bottom-color: rgba(167, 141, 82, 0.55);
+}
+.variants-body--couture-noir .couture-voice__col li {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-voice__col--anti li {
+  color: rgba(255, 255, 255, 0.40);
+  text-decoration-color: rgba(167, 141, 82, 0.65);
+}
+
+/* Applications ------------------------------------------ */
+.variants-body--couture-noir .couture-apps__h {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-apps__lede {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Mockups stay on white paper for legibility on dark backdrop.
+   Make their shadows tighter against the dark page. */
+.variants-body--couture-noir .couture-apps__card-face {
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+  border-color: transparent;
+}
+.variants-body--couture-noir .couture-apps__tag {
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+  border-color: transparent;
+}
+.variants-body--couture-noir .couture-apps__tag-eye {
+  border-color: rgba(255, 255, 255, 0.78);
+  background: #0E0E0E;
+}
+.variants-body--couture-noir .couture-apps__bag-body {
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+  border-color: rgba(255, 255, 255, 0.62);
+}
+.variants-body--couture-noir .couture-apps__bag-handle {
+  border-color: rgba(255, 255, 255, 0.62);
+}
+
+/* Caption styling on dark page */
+.variants-body--couture-noir .couture-apps__cap-name {
+  color: #FFFFFF;
+}
+.variants-body--couture-noir .couture-apps__cap-n {
+  color: #A78D52;
+}
