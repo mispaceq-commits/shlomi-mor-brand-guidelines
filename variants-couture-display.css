@@ -574,52 +574,86 @@
 
 
 /* =========================================================
-   V — VOICE · QUIET/EXACT/KIND poster
+   V — VOICE · Three principles + sample lines
    ========================================================= */
 .couture-d-voice {
   position: absolute;
   inset: 0;
-  padding: 180px 84px 120px;
+  padding: 130px 84px 120px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 18px;
   z-index: 1;
 }
 .couture-d-voice__h {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.couture-d-voice__l {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 36px;
   font-family: var(--f-cd-sans);
   font-weight: 900;
-  font-size: 156px;
-  line-height: 0.94;
-  letter-spacing: -0.04em;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: -0.02em;
   color: var(--c-cd-ink);
 }
-.couture-d-voice__l-w {
-  display: inline-block;
-}
-.couture-d-voice__l-rule {
-  height: 1px;
-  background: var(--c-cd-ink);
-  margin-top: 8px;
-}
-.couture-d-voice__dot {
-  color: var(--c-cd-gold);
+.couture-d-voice__dot { color: var(--c-cd-gold); }
+.couture-d-voice__lede {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--c-cd-soft);
+  max-width: 540px;
 }
 
+/* Three side-by-side pillars (Quiet / Exact / Kind) */
+.couture-d-voice__pillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 36px;
+  margin-top: 18px;
+  padding-top: 28px;
+  padding-bottom: 28px;
+  border-top: 1px solid var(--c-cd-hair);
+  border-bottom: 1px solid var(--c-cd-hair);
+}
+.couture-d-voice__pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.couture-d-voice__pn {
+  font-family: var(--f-cd-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: var(--c-cd-gold);
+}
+.couture-d-voice__pw {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 900;
+  font-size: 88px;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--c-cd-ink);
+}
+.couture-d-voice__pdot { color: var(--c-cd-gold); }
+.couture-d-voice__pillar p {
+  margin: 0;
+  font-family: var(--f-cd-sans);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--c-cd-soft);
+  max-width: 320px;
+}
+
+/* Sample-line columns underneath */
 .couture-d-voice__cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 .couture-d-voice__col {
   display: flex;
