@@ -1,0 +1,997 @@
+/* =========================================================
+   Shlomi Mor Wigs — Premium Variant · Couture Edition
+   6-page sampler. Direction:
+     · Chanel × Dior, 50/50 with a slight lean toward Chanel.
+     · Pure white paper, deep black ink, antique gold as the
+       only accent — used at ≤ 5%.
+     · STRICT CENTRAL AXIS on every page. Hairline rules top
+       and bottom, never thick borders.
+     · Display serif (Didot) for the title-page moments and
+       the Dior-style italic accents. Tracked Futura LT in
+       all-caps for the Chanel-style labels. Snell Roundhand
+       once, as a quiet signature.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
+
+.variants-body--couture { background: #DCD7CF; }
+
+.page--couture {
+  --c-c-bg:      #FFFFFF;
+  --c-c-ink:     #0E0E0E;
+  --c-c-soft:    #4D463D;
+  --c-c-mute:    #8B8480;
+  --c-c-gold:    #A78D52;
+  --c-c-gold-soft: rgba(167, 141, 82, 0.45);
+  --c-c-hair:    rgba(14, 14, 14, 0.18);
+  --c-c-hair-strong: rgba(14, 14, 14, 0.55);
+
+  /* Local typefaces shipped in /assets/fonts */
+  --f-c-serif:   'idot', 'Didot', 'Cormorant Garamond', 'Times New Roman', Times, serif;
+  --f-c-italic:  'idot', 'Didot', 'Cormorant Garamond', serif;
+  --f-c-sans:    'FuturaLT', 'Futura LT', 'Futura', 'Helvetica Neue', Arial, sans-serif;
+  --f-c-script:  'SnellRoundhand', 'Snell Roundhand', 'Sacramento', cursive;
+
+  background: var(--c-c-bg);
+  color: var(--c-c-ink);
+}
+
+.page--couture .page__inner { display: block; padding: 0; }
+
+
+/* =========================================================
+   Shared header / footer rails (Chanel-style hairlines)
+   ========================================================= */
+.couture__head,
+.couture__foot {
+  position: absolute;
+  left: 72px;
+  right: 72px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+}
+.couture__head {
+  top: 56px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--c-c-hair);
+}
+.couture__foot {
+  bottom: 56px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-c-hair);
+}
+
+.couture__head-num,
+.couture__foot-num {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+  justify-self: start;
+}
+.couture__foot-num { justify-self: center; letter-spacing: 0.55em; }
+
+.couture__head-text {
+  justify-self: center;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: var(--c-c-ink);
+}
+.couture__head-edition {
+  justify-self: end;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--c-c-mute);
+}
+
+.couture__foot-rule {
+  display: block;
+  height: 1px;
+  background: var(--c-c-hair-strong);
+}
+.couture__foot-text {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+}
+
+
+/* =========================================================
+   I — COVER
+   ========================================================= */
+.couture__head--cover,
+.couture__foot--cover {
+  grid-template-columns: 1fr auto 1fr;
+}
+.couture__head--cover {
+  top: 56px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.couture__head--cover .couture__rule {
+  display: block;
+  height: 1px;
+  background: var(--c-c-gold-soft);
+}
+.couture__head--cover .couture__head-text {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+}
+.couture__foot--cover {
+  bottom: 56px;
+  padding-top: 0;
+  border-top: none;
+  grid-template-columns: 1fr auto 1fr;
+}
+.couture__foot--cover::before,
+.couture__foot--cover::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: var(--c-c-hair-strong);
+}
+.couture__foot--cover .couture__foot-text {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  text-transform: none;
+  color: var(--c-c-ink);
+}
+
+.couture-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 80px;
+}
+
+.couture-cover__mono {
+  width: 280px;
+  margin: 0 auto 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.couture-cover__mono img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.couture-cover__wordmark {
+  margin: 0;
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 84px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-ink);
+  padding-left: 0.42em; /* compensate trailing letter-spacing for visual centering */
+}
+
+.couture-cover__sub {
+  margin: 22px auto 0;
+  display: grid;
+  grid-template-columns: 80px auto 80px;
+  align-items: center;
+  gap: 18px;
+  width: 480px;
+}
+.couture-cover__sub-rule {
+  display: block;
+  height: 1px;
+  background: var(--c-c-ink);
+}
+.couture-cover__sub-text {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--c-c-ink);
+  white-space: nowrap;
+}
+
+.couture-cover__edition {
+  margin: 56px auto 0;
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.couture-cover__edition em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--c-c-ink);
+}
+.couture-cover__edition .dot { color: var(--c-c-gold); }
+
+
+/* =========================================================
+   II — THE HOUSE
+   ========================================================= */
+.couture-house {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 160px 180px;
+  gap: 36px;
+}
+
+.couture-house__eyebrow {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+}
+
+.couture-house__quote {
+  margin: 0;
+  font-family: var(--f-c-serif);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.18;
+  letter-spacing: -0.005em;
+  color: var(--c-c-ink);
+}
+.couture-house__quote em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--c-c-ink);
+}
+
+.couture-house__body {
+  max-width: 720px;
+}
+.couture-house__body p {
+  margin: 0;
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: var(--c-c-soft);
+}
+
+.couture-house__sig {
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.couture-house__sig-script {
+  font-family: var(--f-c-script);
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--c-c-ink);
+}
+.couture-house__sig-line {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+}
+
+
+/* =========================================================
+   III — PALETTE
+   ========================================================= */
+.couture-palette {
+  position: absolute;
+  inset: 0;
+  padding: 140px 110px 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.couture-palette__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.couture-palette__eyebrow {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+}
+.couture-palette__title {
+  margin: 0;
+  font-family: var(--f-c-serif);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: var(--c-c-ink);
+}
+.couture-palette__title em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+}
+.couture-palette__lede {
+  max-width: 640px;
+  margin: 4px 0 0;
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: var(--c-c-soft);
+}
+
+.couture-palette__grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  align-items: stretch;
+}
+.couture-palette__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  text-align: center;
+}
+.couture-palette__chip {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border: 1px solid var(--c-c-hair-strong);
+}
+.couture-palette__chip--ink   { background: #0E0E0E; border-color: #0E0E0E; }
+.couture-palette__chip--paper { background: #FFFFFF; border-color: var(--c-c-hair-strong); }
+.couture-palette__chip--gold  { background: #A78D52; border-color: #A78D52; }
+
+.couture-palette__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-c-hair);
+  width: 100%;
+}
+.couture-palette__num {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: var(--c-c-gold);
+}
+.couture-palette__meta h4 {
+  margin: 2px 0;
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-ink);
+}
+.couture-palette__hex {
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--c-c-soft);
+}
+.couture-palette__use {
+  margin: 8px 0 0;
+  max-width: 280px;
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--c-c-soft);
+  min-height: 38px;
+}
+
+
+/* =========================================================
+   IV — TYPE SYSTEM
+   ========================================================= */
+.couture-type {
+  position: absolute;
+  inset: 0;
+  padding: 150px 110px 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+.couture-type__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.couture-type__eyebrow {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+}
+.couture-type__title {
+  margin: 0;
+  font-family: var(--f-c-serif);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: var(--c-c-ink);
+}
+.couture-type__title em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+}
+.couture-type__lede {
+  max-width: 640px;
+  margin: 0;
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: var(--c-c-soft);
+  text-align: center;
+}
+
+.couture-type__row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.couture-type__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid var(--c-c-hair);
+  padding: 36px 28px 28px;
+  position: relative;
+}
+.couture-type__spec {
+  font-size: 124px;
+  line-height: 1;
+  color: var(--c-c-ink);
+  margin-bottom: 22px;
+  min-height: 134px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.couture-type__spec--serif {
+  font-family: var(--f-c-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+.couture-type__spec--sans {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.couture-type__spec--script {
+  font-family: var(--f-c-script);
+  font-weight: 700;
+  color: var(--c-c-gold);
+  font-size: 104px;
+}
+.couture-type__cap {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--c-c-gold);
+  letter-spacing: 0.05em;
+}
+.couture-type__cell h4 {
+  margin: 6px 0 8px;
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-ink);
+}
+.couture-type__cell p {
+  margin: 0;
+  max-width: 240px;
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--c-c-soft);
+}
+
+.couture-type__rule {
+  margin: 4px 0 0;
+  max-width: 880px;
+  text-align: center;
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: var(--c-c-ink);
+}
+.couture-type__rule strong {
+  font-family: var(--f-c-sans);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-ink);
+}
+.couture-type__rule em { font-family: var(--f-c-italic); font-style: italic; }
+
+
+/* =========================================================
+   V — VOICE & TONE
+   ========================================================= */
+.couture-voice {
+  position: absolute;
+  inset: 0;
+  padding: 150px 110px 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+}
+.couture-voice__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.couture-voice__eyebrow {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+}
+.couture-voice__title {
+  margin: 0;
+  font-family: var(--f-c-serif);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: var(--c-c-ink);
+}
+.couture-voice__title em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+}
+.couture-voice__lede {
+  max-width: 720px;
+  margin: 0;
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: var(--c-c-soft);
+  text-align: center;
+}
+
+.couture-voice__cols {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0;
+  align-items: stretch;
+  max-width: 1080px;
+  margin-top: 12px;
+}
+.couture-voice__divider {
+  background: var(--c-c-hair-strong);
+}
+.couture-voice__col {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 0 56px;
+}
+.couture-voice__col-h {
+  margin: 0;
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--c-c-ink);
+}
+.couture-voice__col--anti .couture-voice__col-h {
+  color: var(--c-c-gold);
+  font-family: var(--f-c-sans);
+}
+.couture-voice__col--anti .couture-voice__col-h em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--c-c-gold);
+}
+.couture-voice__col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.couture-voice__col li {
+  font-family: var(--f-c-serif);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--c-c-ink);
+}
+.couture-voice__col--anti li {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  color: var(--c-c-mute);
+  text-decoration: line-through;
+  text-decoration-color: var(--c-c-gold-soft);
+  text-decoration-thickness: 1px;
+}
+
+
+/* =========================================================
+   VI — APPLICATIONS
+   ========================================================= */
+.couture-apps {
+  position: absolute;
+  inset: 0;
+  padding: 150px 110px 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+}
+.couture-apps__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.couture-apps__eyebrow {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+}
+.couture-apps__title {
+  margin: 0;
+  font-family: var(--f-c-serif);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  color: var(--c-c-ink);
+}
+.couture-apps__title em {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.couture-apps__row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  align-items: end;
+  width: 100%;
+}
+.couture-apps__item {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.couture-apps__item figcaption {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 9.5px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+}
+
+/* --- Business card --- */
+.couture-apps__card {
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+}
+.couture-apps__card-face {
+  width: 240px;
+  height: 138px;
+  border: 1px solid var(--c-c-hair-strong);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(14, 14, 14, 0.08);
+}
+.couture-apps__card-mono {
+  width: 42px;
+  height: auto;
+  display: block;
+  margin-bottom: 4px;
+}
+.couture-apps__card-mark {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: var(--c-c-ink);
+}
+.couture-apps__card-tag {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--c-c-soft);
+}
+.couture-apps__card-face--back {
+  align-items: flex-start;
+  text-align: left;
+  justify-content: center;
+  gap: 6px;
+}
+.couture-apps__card-name {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  color: var(--c-c-ink);
+}
+.couture-apps__card-role {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 8.5px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+}
+.couture-apps__card-line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--c-c-hair-strong);
+  margin: 6px 0;
+}
+.couture-apps__card-meta {
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--c-c-soft);
+}
+
+/* --- Hangtag --- */
+.couture-apps__tag {
+  position: relative;
+  width: 180px;
+  min-height: 268px;
+  padding: 64px 22px 28px;
+  border: 1px solid var(--c-c-hair-strong);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  background: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(14, 14, 14, 0.08);
+  border-radius: 6px 6px 2px 2px;
+}
+.couture-apps__tag::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--c-c-hair-strong);
+  background: #FFFFFF;
+}
+.couture-apps__tag-eye {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-c-gold);
+}
+.couture-apps__tag-mono {
+  width: 56px;
+  height: auto;
+  display: block;
+  margin-top: 8px;
+}
+.couture-apps__tag-mark {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: var(--c-c-ink);
+}
+.couture-apps__tag-rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--c-c-hair-strong);
+  margin: 6px 0;
+}
+.couture-apps__tag-line {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--c-c-soft);
+}
+.couture-apps__tag-line--gold {
+  font-family: var(--f-c-sans);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-gold);
+  margin-top: 4px;
+}
+
+/* --- Garment bag --- */
+.couture-apps__bag {
+  position: relative;
+  width: 220px;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.couture-apps__bag-handle {
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 32px;
+  border: 1px solid var(--c-c-hair-strong);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.couture-apps__bag-handle--l { left: 26px; }
+.couture-apps__bag-handle--r { right: 26px; }
+.couture-apps__bag-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 28px;
+  bottom: 0;
+  border: 1px solid var(--c-c-hair-strong);
+  background: #FFFFFF;
+  padding: 36px 22px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(14, 14, 14, 0.08);
+}
+.couture-apps__bag-mono {
+  width: 60px;
+  height: auto;
+  display: block;
+}
+.couture-apps__bag-mark {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.42em;
+  color: var(--c-c-ink);
+}
+.couture-apps__bag-tag {
+  font-family: var(--f-c-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--c-c-soft);
+}
+
+
+/* =========================================================
+   Generic body & page tweaks for the variant
+   ========================================================= */
+.variants-body--couture .pageinfo { display: none; }
+.variants-body--couture .book {
+  background: #DCD7CF;
+  padding: 56px;
+  gap: 56px;
+}
+.variants-body--couture .page--couture {
+  margin: 0 auto;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+}
