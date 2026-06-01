@@ -509,15 +509,16 @@
 
 /* =========================================================
    VI — APPLICATIONS
-   Business card, hangtag, shopping bag.
+   Three real-world objects, scaled up so the customer can
+   actually read what's on them.
    ========================================================= */
 .couture-apps {
   position: absolute;
   inset: 0;
-  padding: 200px 84px 130px;
+  padding: 120px 84px 130px;
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 14px;
 }
 
 .couture-apps__h {
@@ -530,12 +531,23 @@
   line-height: 1;
 }
 
+.couture-apps__lede {
+  margin: 0;
+  font-family: var(--f-c-sans);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--c-c-soft);
+  max-width: 640px;
+}
+
 .couture-apps__row {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1.2fr;
-  gap: 56px;
+  grid-template-columns: 1.15fr 0.85fr 1fr;
+  gap: 64px;
   align-items: end;
   flex: 1;
+  margin-top: 12px;
 }
 
 .couture-apps__item {
@@ -543,209 +555,234 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;
+  gap: 24px;
+  height: 100%;
+  justify-content: flex-end;
 }
 .couture-apps__item figcaption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.couture-apps__cap-n {
   font-family: var(--f-c-sans);
   font-weight: 700;
   font-size: 10px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--c-c-mute);
+  color: var(--c-c-gold);
+}
+.couture-apps__cap-name {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--c-c-ink);
+}
+.couture-apps__cap-spec {
+  display: none;
 }
 
-/* Business card */
+/* Business card — stacked vertically, front above back */
 .couture-apps__card {
   display: flex;
+  flex-direction: column;
   gap: 18px;
 }
 .couture-apps__card-face {
-  width: 240px;
-  height: 138px;
+  width: 340px;
+  height: 196px;
   background: #FFFFFF;
   border: 1px solid var(--c-c-hair);
-  box-shadow: 0 8px 22px rgba(14, 14, 14, 0.08);
-  padding: 22px 22px;
+  box-shadow: 0 10px 28px rgba(14, 14, 14, 0.10);
+  padding: 24px 28px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  gap: 4px;
-}
-.couture-apps__card-face--front {
-  align-items: center;
+  gap: 6px;
 }
 .couture-apps__card-face--back {
   align-items: flex-start;
   justify-content: flex-start;
-  padding-top: 28px;
+  padding-top: 32px;
 }
 .couture-apps__card-mono {
-  width: 32px;
+  width: 48px;
   height: auto;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .couture-apps__card-mark {
   font-family: var(--f-c-sans);
   font-weight: 700;
-  font-size: 11px;
+  font-size: 16px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--c-c-ink);
+  padding-left: 0.42em;
 }
 .couture-apps__card-tag {
   font-family: var(--f-c-sans);
   font-weight: 500;
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--c-c-mute);
+  margin-top: 4px;
+  padding-left: 0.32em;
 }
 .couture-apps__card-name {
   font-family: var(--f-c-sans);
   font-weight: 700;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--c-c-ink);
-  margin-bottom: 2px;
+  padding-left: 0.42em;
 }
 .couture-apps__card-role {
   font-family: var(--f-c-sans);
-  font-weight: 500;
-  font-size: 8.5px;
+  font-weight: 600;
+  font-size: 10px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--c-c-gold);
-  margin-bottom: 8px;
+  margin-top: 4px;
 }
 .couture-apps__card-line {
   display: block;
-  width: 28px;
+  width: 36px;
   height: 1px;
   background: var(--c-c-hair);
-  margin: 4px 0 10px;
+  margin: 14px 0 14px;
 }
 .couture-apps__card-meta {
   font-family: var(--f-c-sans);
   font-weight: 400;
-  font-size: 9px;
-  letter-spacing: 0.10em;
+  font-size: 11px;
+  letter-spacing: 0.04em;
   color: var(--c-c-soft);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* Hangtag */
+/* Hangtag — taller, fully legible */
 .couture-apps__tag {
   position: relative;
-  width: 160px;
-  min-height: 244px;
+  width: 220px;
+  height: 340px;
   background: #FFFFFF;
   border: 1px solid var(--c-c-hair);
-  border-radius: 4px 4px 2px 2px;
-  padding: 56px 20px 24px;
-  box-shadow: 0 8px 22px rgba(14, 14, 14, 0.08);
+  border-radius: 6px 6px 3px 3px;
+  padding: 76px 24px 26px;
+  box-shadow: 0 10px 28px rgba(14, 14, 14, 0.10);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 }
 .couture-apps__tag-eye {
   position: absolute;
-  top: 18px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   border: 1px solid var(--c-c-ink);
   background: #FFFFFF;
 }
 .couture-apps__tag-mono {
-  width: 38px;
+  width: 60px;
   height: auto;
-  margin-top: 4px;
+  margin-top: 6px;
+  margin-bottom: 2px;
 }
 .couture-apps__tag-mark {
-  font-family: var(--f-c-sans);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--c-c-ink);
-}
-.couture-apps__tag-rule {
-  display: block;
-  width: 38px;
-  height: 1px;
-  background: var(--c-c-hair);
-  margin: 6px 0;
-}
-.couture-apps__tag-line {
-  font-family: var(--f-c-sans);
-  font-weight: 500;
-  font-size: 9px;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--c-c-soft);
-}
-.couture-apps__tag-line--gold {
-  color: var(--c-c-gold);
-  font-weight: 700;
-}
-
-/* Shopping bag */
-.couture-apps__bag {
-  position: relative;
-  width: 220px;
-  height: 256px;
-}
-.couture-apps__bag-handle {
-  position: absolute;
-  top: 0;
-  width: 50px;
-  height: 32px;
-  border: 1px solid var(--c-c-ink);
-  border-bottom: none;
-  border-radius: 50% 50% 0 0;
-}
-.couture-apps__bag-handle--l { left: 36px; }
-.couture-apps__bag-handle--r { right: 36px; }
-.couture-apps__bag-body {
-  position: absolute;
-  top: 32px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #FFFFFF;
-  border: 1px solid var(--c-c-ink);
-  padding: 56px 24px 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 8px 22px rgba(14, 14, 14, 0.08);
-}
-.couture-apps__bag-mono {
-  width: 56px;
-  height: auto;
-  margin-bottom: 6px;
-}
-.couture-apps__bag-mark {
   font-family: var(--f-c-sans);
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--c-c-ink);
+  padding-left: 0.42em;
+}
+.couture-apps__tag-rule {
+  display: block;
+  width: 50px;
+  height: 1px;
+  background: var(--c-c-hair);
+  margin: 12px 0 6px;
+}
+.couture-apps__tag-line {
+  font-family: var(--f-c-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-soft);
+  padding-left: 0.42em;
+}
+.couture-apps__tag-line--gold {
+  color: var(--c-c-gold);
+  font-weight: 700;
+}
+
+/* Shopping bag — full size with proper handles */
+.couture-apps__bag {
+  position: relative;
+  width: 300px;
+  height: 360px;
+}
+.couture-apps__bag-handle {
+  position: absolute;
+  top: 0;
+  width: 64px;
+  height: 40px;
+  border: 1.5px solid var(--c-c-ink);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+}
+.couture-apps__bag-handle--l { left: 56px; }
+.couture-apps__bag-handle--r { right: 56px; }
+.couture-apps__bag-body {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #FFFFFF;
+  border: 1px solid var(--c-c-ink);
+  padding: 80px 28px 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 10px 28px rgba(14, 14, 14, 0.10);
+}
+.couture-apps__bag-mono {
+  width: 84px;
+  height: auto;
+  margin-bottom: 8px;
+}
+.couture-apps__bag-mark {
+  font-family: var(--f-c-sans);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--c-c-ink);
+  padding-left: 0.42em;
 }
 .couture-apps__bag-tag {
   font-family: var(--f-c-sans);
   font-weight: 500;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--c-c-mute);
+  padding-left: 0.42em;
 }
 
 
